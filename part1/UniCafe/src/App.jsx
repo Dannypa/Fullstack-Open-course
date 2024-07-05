@@ -4,9 +4,10 @@ import { Fragment } from "react"
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const StatisticLine = ({ title, statistic }) => (
-  <Fragment key={title}>
-    {title} {statistic} <br />
-  </Fragment>
+  <tr key={title}>
+    <td>{title}</td>
+    <td>{statistic} </td>
+  </tr>
 )
 
 const Statistics = ({ statistics }) => {
@@ -21,7 +22,11 @@ const Statistics = ({ statistics }) => {
   if (total == 0) {
     return <p>No feedback given</p>
   } else {
-    return statistics.map((el) => StatisticLine(el))
+    return (
+      <table>
+        <tbody>{statistics.map((el) => StatisticLine(el))}</tbody>
+      </table>
+    )
   }
 }
 
