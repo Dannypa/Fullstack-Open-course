@@ -1,21 +1,27 @@
-const Header = (props) => {
-  return <h1>{props.coursename}</h1>
+const Header = ({ coursename }) => {
+  return <h1>{coursename}</h1>
 }
 
-const Content = (props) => {
-  const contents = []
-  for (const part of props.parts) {
-    contents.push(
-      <p>
-        {part.name} {part.exerciseNumber}
-      </p>
-    )
-  }
-  return contents
+const Part = ({ name, exerciseNumber }) => {
+  return (
+    <p>
+      {name} {exerciseNumber}
+    </p>
+  )
 }
 
-const Total = (props) => {
-  return <p>Number of exercises {props.number}</p>
+const Content = ({ parts }) => {
+  return (
+    <div>
+      <Part {...parts[0]} />
+      <Part {...parts[1]} />
+      <Part {...parts[2]} />
+    </div>
+  )
+}
+
+const Total = ({ number }) => {
+  return <p>Number of exercises {number}</p>
 }
 
 const App = () => {
