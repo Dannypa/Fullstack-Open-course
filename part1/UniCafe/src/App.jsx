@@ -2,11 +2,27 @@ import { useState } from "react"
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
-const Statistic = ({ title, statistic }) => (
+const StatisticLine = ({ title, statistic }) => (
   <>
     {title} {statistic} <br />
   </>
 )
+
+const Statistics = ({ statistics }) => {
+  // i do not want to write bad code.
+  let total = 0
+  // the following snippet gets total number of feedbacks independent of the index of the "all" entry in the prop
+  statistics.forEach(({ title, statistic }) => {
+    if (title == "all") {
+      total = statistic
+    }
+  })
+  if (total == 0) {
+    return <p>No feedback given</p>
+  } else {
+    return statistics.map((el) => StatisticLine(el))
+  }
+}
 
 const App = () => {
   // save clicks of each button to its own state
@@ -26,17 +42,18 @@ const App = () => {
       <Button onClick={handleNeutralFeedback} text="neutral" />
       <Button onClick={handleBadFeedback} text="bad" />
       <h1> statistics </h1>
-      <Statistic title="good" statistic={good} />
-      <Statistic title="neutral" statistic={neutral} />
-      <Statistic title="bad" statistic={bad} />
-      <Statistic title="all" statistic={total} />
-      <Statistic
-        title="average"
-        statistic={((good - bad) / total).toFixed(3)}
-      />
-      <Statistic
-        title="positive"
-        statistic={((good * 100) / total).toFixed(3).toString() + "%"}
+      <Statistics
+        statistics={[
+          { title: "good", statistic: good },
+          { title: "neutral", statistic: neutral },
+          { title: "bad", statistic: bad },
+          { title: "all", statistic: total },
+          { title: "average", statistic: ((good - bad) / total).toFixed(3) },
+          {
+            title: "positive",
+            statistic: ((good * 100) / total).toFixed(3).toString() + "%",
+          },
+        ]}
       />
     </div>
   )
