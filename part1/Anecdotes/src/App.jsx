@@ -3,6 +3,17 @@ import { useState } from "react"
 // generates a random number in the (closed) interval [0; b]
 const randInt = (upper) => Math.round(Math.random() * upper)
 
+const VoteDisplay = ({ voteNumber }) => (
+  <p>This anecdote has {voteNumber} votes.</p>
+)
+
+const AnecdoteDisplay = ({ anecdote, votes }) => (
+  <>
+    <p>{anecdote}</p>
+    <p>This anecdote has {votes} votes.</p>
+  </>
+)
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -16,13 +27,34 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
 
   const handleSelect = () => setSelected(randInt(anecdotes.length - 1))
+  const handleVote = () => {
+    const copiedVotes = [...votes]
+    copiedVotes[selected]++
+    setVotes(copiedVotes)
+  }
+
+  const getAnecdoteComponent = (index) => (
+    <AnecdoteDisplay anecdote={anecdotes[index]} votes={votes[index]} />
+  )
+
+  let mostVoteIndex = 0
+  for (let i = 1; i < votes.length; i++) {
+    if (votes[i] > votes[mostVoteIndex]) {
+      mostVoteIndex = i
+    }
+  }
 
   return (
     <div>
-      {anecdotes[selected]} <br />
-      <button onClick={handleSelect}>choose an anecdote</button>
+      <h1>Anecdote of the day</h1>
+      {getAnecdoteComponent(selected)}
+      <button onClick={handleSelect}>next (if you are lucky) anecdote</button>
+      <button onClick={handleVote}>vote for this anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      {getAnecdoteComponent(mostVoteIndex)}
     </div>
   )
 }
