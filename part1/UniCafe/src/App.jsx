@@ -1,11 +1,12 @@
 import { useState } from "react"
+import { Fragment } from "react"
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const StatisticLine = ({ title, statistic }) => (
-  <>
+  <Fragment key={title}>
     {title} {statistic} <br />
-  </>
+  </Fragment>
 )
 
 const Statistics = ({ statistics }) => {
@@ -48,7 +49,10 @@ const App = () => {
           { title: "neutral", statistic: neutral },
           { title: "bad", statistic: bad },
           { title: "all", statistic: total },
-          { title: "average", statistic: ((good - bad) / total).toFixed(3) },
+          {
+            title: "average",
+            statistic: ((good - bad) / total).toFixed(3),
+          },
           {
             title: "positive",
             statistic: ((good * 100) / total).toFixed(3).toString() + "%",
