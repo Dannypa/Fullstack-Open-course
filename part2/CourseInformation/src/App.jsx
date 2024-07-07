@@ -14,7 +14,7 @@ const Content = ({ parts }) => {
   return (
     <div>
       {parts.map((part) => (
-        <Part {...part} />
+        <Part key={part.id} {...part} />
       ))}
     </div>
   )
