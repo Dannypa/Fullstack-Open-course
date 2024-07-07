@@ -12,6 +12,7 @@ const App = () => {
   const setCurrentName = (newName) => (currentName = newName)
   var currentNumber = ""
   const setCurrentNumber = (newNumber) => (currentNumber = newNumber)
+  const [filter, setFilter] = useState("")
 
   const addName = (event) => {
     event.preventDefault()
@@ -40,6 +41,10 @@ const App = () => {
     setCurrentNumber(event.target.value)
   }
 
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value.toLowerCase())
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -53,13 +58,18 @@ const App = () => {
         <button type="submit">add</button>
       </form>
       <h2>Contacts</h2>
+      <p>
+        Filter shown with <input onChange={handleFilterChange}></input>
+      </p>
       <div>
-        {contacts.map((contact) => (
-          <Fragment key={contact.name}>
-            {contact.name}: {contact.number}
-            <br />
-          </Fragment>
-        ))}
+        {contacts
+          .filter((contact) => contact.name.toLowerCase().includes(filter))
+          .map((contact) => (
+            <Fragment key={contact.name}>
+              {contact.name}: {contact.number}
+              <br />
+            </Fragment>
+          ))}
       </div>
     </div>
   )
