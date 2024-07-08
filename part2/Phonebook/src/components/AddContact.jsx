@@ -1,3 +1,5 @@
+import contactService from "../services/contacts"
+
 const AddContact = (props) => {
   var currentName = "" // why do we need states for this?
   const setCurrentName = (newName) => (currentName = newName)
@@ -26,7 +28,11 @@ const AddContact = (props) => {
       number: currentNumber,
     }
 
-    props.setContacts(props.contacts.concat(newContact))
+    // ensure that the version in the browser corresponds to the version on server
+    contactService
+      .addContact(newContact)
+      .then((added) => props.setContacts(props.contacts.concat(added)))
+
     setCurrentName("")
     setCurrentNumber("")
     event.target.reset()
