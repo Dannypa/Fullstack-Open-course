@@ -12,26 +12,53 @@ const AddContact = (props) => {
 
   const handleNumberChange = (event) => {
     setCurrentNumber(event.target.value)
+    console.log("current number is now", currentNumber)
   }
 
   const addName = (event) => {
     event.preventDefault()
 
+    var inList = false
     if (props.contacts.map((contact) => contact.name).includes(currentName)) {
-      alert(`${currentName} is already in the contacts`)
-      return
+      inList = true
+      if (
+        !window.confirm(
+          `${currentName} is already in the contact list. Replace the old number with a new one?`
+        )
+      ) {
+        return
+      }
     }
-
-    console.log(currentName, "is being added")
+    console.log(currentNumber)
     const newContact = {
       name: currentName,
       number: currentNumber,
     }
 
     // ensure that the version in the browser corresponds to the version on server
-    contactService
-      .addContact(newContact)
-      .then((added) => props.setContacts(props.contacts.concat(added)))
+    if (inList) {
+      console.log(
+        `the number for ${newContact.name} is being replaced (to ${newContact.number})`
+      )
+      contactService
+        .changeContact(
+          props.contacts.filter((c) => c.name === newContact.name)[0].id, // find the id of the contact with that name
+          newContact
+        )
+        .then((added) => {
+          console.log(
+            props.contacts.map((c) => (c.name === newContact.name ? added : c))
+          )
+          props.setContacts(
+            props.contacts.map((c) => (c.name === newContact.name ? added : c))
+          )
+        })
+    } else {
+      console.log(currentName, "is being added")
+      contactService
+        .addContact(newContact)
+        .then((added) => props.setContacts(props.contacts.concat(added)))
+    }
 
     setCurrentName("")
     setCurrentNumber("")

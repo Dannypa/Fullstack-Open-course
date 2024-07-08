@@ -17,7 +17,7 @@ const ContactList = ({ contacts, setContacts, filter }) => {
         `Are you sure you want to remove ${contact.name} from your phone book?`
       )
     ) {
-      setContacts(contacts.filter((c) => c.id != contact.id))
+      setContacts(contacts.filter((c) => c.id !== contact.id))
       contactService.deleteContact(contact.id)
     }
   }
