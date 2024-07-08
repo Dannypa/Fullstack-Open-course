@@ -1,14 +1,16 @@
-import { Fragment } from "react"
+const Contact = (contact) => (
+  <>
+    {contact.name}: {contact.number}
+    <br />
+  </>
+)
 
 const ContactList = ({ contacts, filter }) => (
   <div>
     {contacts
       .filter((contact) => contact.name.toLowerCase().includes(filter))
       .map((contact) => (
-        <Fragment key={contact.name}>
-          {contact.name}: {contact.number}
-          <br />
-        </Fragment>
+        <Contact key={contact.name} {...contact} />
       ))}
   </div>
 )
