@@ -11,9 +11,15 @@ const Contact = ({ contact, deleteContact }) => {
 }
 
 const ContactList = ({ contacts, setContacts, filter }) => {
-  const deleteContact = (id) => {
-    setContacts(contacts.filter((contact) => contact.id != id))
-    contactService.deleteContact(id)
+  const deleteContact = (contact) => {
+    if (
+      window.confirm(
+        `Are you sure you want to remove ${contact.name} from your phone book?`
+      )
+    ) {
+      setContacts(contacts.filter((c) => c.id != contact.id))
+      contactService.deleteContact(contact.id)
+    }
   }
 
   return (
@@ -24,7 +30,7 @@ const ContactList = ({ contacts, setContacts, filter }) => {
           <Contact
             key={contact.name}
             contact={contact}
-            deleteContact={() => deleteContact(contact.id)}
+            deleteContact={() => deleteContact(contact)}
           />
         ))}
     </div>
