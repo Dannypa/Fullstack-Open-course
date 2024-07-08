@@ -33,7 +33,7 @@ const App = () => {
 
       <SearchBar setFilter={setFilter} />
 
-      <ContactList contacts={contacts} filter={filter} />
+      <ContactList {...{ contacts, setContacts, filter }} />
     </div>
   )
 }

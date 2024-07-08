@@ -8,4 +8,7 @@ const getAll = () => axios.get(SERVER_URL).then((response) => response.data)
 const addContact = (newContact) =>
   axios.post(SERVER_URL, newContact).then((response) => response.data)
 
-export default { getAll, addContact }
+const deleteContact = (id) =>
+  axios.delete(`${SERVER_URL}/${id}`).then((response) => response.data)
+
+export default { getAll, addContact, deleteContact }
