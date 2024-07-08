@@ -3,8 +3,7 @@ import AddContact from "./components/AddContact"
 import SearchBar from "./components/SearchBar"
 import ContactList from "./components/ContactList"
 import axios from "axios"
-
-const SERVER_URL = "http://localhost:3001/persons"
+import contactService from "./services/contacts"
 
 const App = () => {
   const [contacts, setContacts] = useState([])
@@ -13,9 +12,9 @@ const App = () => {
   // getting the data from the server
   useEffect(() => {
     console.log("effect")
-    axios.get(SERVER_URL).then((response) => {
+    contactService.getAll().then((response) => {
       console.log("promise fulfilled")
-      setContacts(response.data)
+      setContacts(response)
     })
   }, [])
 

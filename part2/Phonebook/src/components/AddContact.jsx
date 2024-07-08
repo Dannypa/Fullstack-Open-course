@@ -25,6 +25,7 @@ const AddContact = (props) => {
       name: currentName,
       number: currentNumber,
     }
+
     props.setContacts(props.contacts.concat(newContact))
     setCurrentName("")
     setCurrentNumber("")
