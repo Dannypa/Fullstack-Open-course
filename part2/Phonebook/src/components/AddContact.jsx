@@ -1,5 +1,6 @@
 import contactService from "../services/contacts"
 import { useState } from "react"
+import { useRef } from "react"
 
 const AddContact = ({
   contacts,
@@ -7,12 +8,12 @@ const AddContact = ({
   setNotification,
   setNotificationType,
 }) => {
-  // var currentName = "" // why do we need states for this?
-  // const setCurrentName = (newName) => (currentName = newName)
-  // var currentNumber = ""
-  // const setCurrentNumber = (newNumber) => (currentNumber = newNumber)
-  const [currentName, setCurrentName] = useState("")
-  const [currentNumber, setCurrentNumber] = useState("")
+  // const [currentName, setCurrentName] = useState("")
+  // const [currentNumber, setCurrentNumber] = useState("")
+  const currentName = useRef("")
+  const currentNumber = useRef("")
+  const setCurrentName = (newName) => (currentName.current = newName)
+  const setCurrentNumber = (newNumber) => (currentNumber.current = newNumber)
 
   const handleNameChange = (event) => {
     setCurrentName(event.target.value)
@@ -27,8 +28,8 @@ const AddContact = ({
   const addName = (event) => {
     event.preventDefault()
     const newContact = {
-      name: currentName,
-      number: currentNumber,
+      name: currentName.current,
+      number: currentNumber.current,
     }
     console.log(newContact)
 
@@ -90,6 +91,7 @@ const AddContact = ({
       setNotificationType("success") // the default type is set to success; bad code since strings are hardcoded
     }, 5000)
     event.target.reset()
+    // rerenders automatically as contacts are set
   }
 
   return (

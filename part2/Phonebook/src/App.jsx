@@ -6,6 +6,7 @@ import contactService from "./services/contacts"
 import Notification from "./components/Notification"
 
 const App = () => {
+  // console.log("Rerendered!!!! AAAAAAAAAAAAAAAAAAA")
   const [contacts, setContacts] = useState([])
   const [filter, setFilter] = useState("")
   const [notification, setNotification] = useState(null)
