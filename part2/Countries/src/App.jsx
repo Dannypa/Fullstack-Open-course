@@ -1,20 +1,27 @@
 import { useState, useRef } from "react"
 import countryService from "./services/countries"
 
-const Country = ({ country }) => {
+const CountryShort = ({ country }) => {
   return <p>{country.name.official}</p>
 }
 
-const CountryList = ({ list, loaded }) => {
-  if (!loaded.current) {
+// const CountryFull = ({country}) => {
+
+// }
+
+const CountryList = ({ list, isLoaded, isFiltered }) => {
+  if (!isFiltered) {
+    return <div>Start typing the name of the country</div>
+  } else if (!isLoaded.current) {
     return <div>Loading...</div>
   } else if (list.length > 10) {
     return <div>Too many matches, specify another filter</div>
+  } else if (list.length === 1) {
   } else {
     return (
       <div>
         {list.map((c) => (
-          <Country key={c.name.official} country={c} />
+          <CountryShort key={c.name.official} country={c} />
         ))}
       </div>
     )
@@ -24,21 +31,26 @@ const CountryList = ({ list, loaded }) => {
 const App = () => {
   const [currentCountry, setCurrentCountry] = useState("")
   const [countryList, setCountryList] = useState([])
-  const loaded = useRef(true)
+  const isLoaded = useRef(true)
 
   const handleCountryChange = (event) => {
-    loaded.current = false
+    isLoaded.current = false
+    console.log("changed", currentCountry)
     setCurrentCountry(event.target.value)
-    countryService.getByName(currentCountry).then((list) => {
+    countryService.getByName(event.target.value).then((list) => {
       setCountryList(list)
-      loaded.current = true
+      isLoaded.current = true
     })
   }
 
   return (
     <div>
       enter country name: <input onChange={handleCountryChange} /> <br />
-      <CountryList list={countryList} loaded={loaded} />
+      <CountryList
+        list={countryList}
+        isLoaded={isLoaded}
+        isFiltered={currentCountry !== ""}
+      />
     </div>
   )
 }
