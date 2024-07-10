@@ -33,6 +33,7 @@ const AddContact = ({
     console.log(newContact)
 
     var inList = false
+    // TODO: bad check since there might be a contact like that added in another browser and then ther will be two contacts with the same name.
     if (contacts.map((contact) => contact.name).includes(newContact.name)) {
       inList = true
       if (
@@ -72,7 +73,7 @@ const AddContact = ({
             `Error! Looks like the information about ${newContact.name} has already been deleted from the server.`
           )
           setNotificationType("error")
-          // todo: delete the old information then?
+          // TODO: delete the old information then?
           setContacts(contacts.filter((c) => c.name != newContact.name)) // name is assumed to be unique
         })
     } else {

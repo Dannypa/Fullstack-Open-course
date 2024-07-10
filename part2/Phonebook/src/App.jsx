@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import AddContact from "./components/AddContact"
 import SearchBar from "./components/SearchBar"
 import ContactList from "./components/ContactList"
-import axios from "axios"
 import contactService from "./services/contacts"
 import Notification from "./components/Notification"
 
