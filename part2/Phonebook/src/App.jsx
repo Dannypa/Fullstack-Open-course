@@ -10,6 +10,7 @@ const App = () => {
   const [contacts, setContacts] = useState([])
   const [filter, setFilter] = useState("")
   const [notification, setNotification] = useState(null)
+  const [notificationType, setNotificationType] = useState("success")
 
   // getting the data from the server
   useEffect(() => {
@@ -22,7 +23,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={notification} />
+      <Notification message={notification} type={notificationType} />
 
       <h1>Phonebook</h1>
 
@@ -31,6 +32,7 @@ const App = () => {
           contacts,
           setContacts,
           setNotification,
+          setNotificationType,
         }}
       />
 

@@ -1,7 +1,12 @@
 import contactService from "../services/contacts"
 import { useState } from "react"
 
-const AddContact = ({ contacts, setContacts, setNotification }) => {
+const AddContact = ({
+  contacts,
+  setContacts,
+  setNotification,
+  setNotificationType,
+}) => {
   // var currentName = "" // why do we need states for this?
   // const setCurrentName = (newName) => (currentName = newName)
   // var currentNumber = ""
@@ -66,6 +71,7 @@ const AddContact = ({ contacts, setContacts, setNotification }) => {
           setNotification(
             `Error! Looks like the information about ${newContact.name} has already been deleted from the server.`
           )
+          setNotificationType("error")
           // todo: delete the old information then?
           setContacts(contacts.filter((c) => c.name != newContact.name)) // name is assumed to be unique
         })
@@ -80,6 +86,7 @@ const AddContact = ({ contacts, setContacts, setNotification }) => {
 
     setTimeout(() => {
       setNotification(null)
+      setNotificationType("success") // the default type is set to success; bad code since strings are hardcoded
     }, 5000)
     event.target.reset()
   }
