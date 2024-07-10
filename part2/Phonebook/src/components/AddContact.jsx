@@ -8,6 +8,7 @@ const AddContact = (props) => {
 
   const handleNameChange = (event) => {
     setCurrentName(event.target.value)
+    console.log("name is changed", event.target.value, currentName)
   }
 
   const handleNumberChange = (event) => {
@@ -17,25 +18,28 @@ const AddContact = (props) => {
 
   const addName = (event) => {
     event.preventDefault()
+    const newContact = {
+      name: currentName,
+      number: currentNumber,
+    }
 
     var inList = false
-    if (props.contacts.map((contact) => contact.name).includes(currentName)) {
+    if (
+      props.contacts.map((contact) => contact.name).includes(newContact.name)
+    ) {
       inList = true
       if (
         !window.confirm(
-          `${currentName} is already in the contact list. Replace the old number with a new one?`
+          `${newContact.name} is already in the contact list. Replace the old number with a new one?`
         )
       ) {
         return
       }
     }
     console.log(currentNumber)
-    const newContact = {
-      name: currentName,
-      number: currentNumber,
-    }
 
     // ensure that the version in the browser corresponds to the version on server
+    var notificationText = ""
     if (inList) {
       console.log(
         `the number for ${newContact.name} is being replaced (to ${newContact.number})`
@@ -53,25 +57,35 @@ const AddContact = (props) => {
             props.contacts.map((c) => (c.name === newContact.name ? added : c))
           )
         })
+      notificationText = `The number of ${newContact.name} is set to ${newContact.number}`
     } else {
-      console.log(currentName, "is being added")
+      console.log(newContact.name, "is being added")
       contactService
         .addContact(newContact)
         .then((added) => props.setContacts(props.contacts.concat(added)))
+      notificationText = `${newContact.name} is added.`
     }
 
-    setCurrentName("")
-    setCurrentNumber("")
+    props.setNotification(notificationText)
+    setTimeout(() => {
+      props.setNotification(null)
+    }, 5000)
     event.target.reset()
   }
 
   return (
-    <form onSubmit={addName}>
+    <form
+      onSubmit={addName}
+      onReset={() => {
+        setCurrentName("")
+        setCurrentNumber("")
+      }}
+    >
       <div>
-        name: <input onChange={handleNameChange} />
+        name: <input onInput={handleNameChange} />
       </div>
       <div>
-        number: <input onChange={handleNumberChange} />
+        number: <input onInput={handleNumberChange} />
       </div>
       <button type="submit">add</button>
     </form>

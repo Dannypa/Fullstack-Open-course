@@ -4,10 +4,12 @@ import SearchBar from "./components/SearchBar"
 import ContactList from "./components/ContactList"
 import axios from "axios"
 import contactService from "./services/contacts"
+import Notification from "./components/Notification"
 
 const App = () => {
   const [contacts, setContacts] = useState([])
   const [filter, setFilter] = useState("")
+  const [notification, setNotification] = useState(null)
 
   // getting the data from the server
   useEffect(() => {
@@ -20,12 +22,15 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={notification} />
+
       <h1>Phonebook</h1>
 
       <AddContact
         {...{
-          contacts: contacts,
-          setContacts: setContacts,
+          contacts,
+          setContacts,
+          setNotification,
         }}
       />
 
