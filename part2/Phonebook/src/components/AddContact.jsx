@@ -1,10 +1,13 @@
 import contactService from "../services/contacts"
+import { useState } from "react"
 
 const AddContact = (props) => {
-  var currentName = "" // why do we need states for this?
-  const setCurrentName = (newName) => (currentName = newName)
-  var currentNumber = ""
-  const setCurrentNumber = (newNumber) => (currentNumber = newNumber)
+  // var currentName = "" // why do we need states for this?
+  // const setCurrentName = (newName) => (currentName = newName)
+  // var currentNumber = ""
+  // const setCurrentNumber = (newNumber) => (currentNumber = newNumber)
+  const [currentName, setCurrentName] = useState("")
+  const [currentNumber, setCurrentNumber] = useState("")
 
   const handleNameChange = (event) => {
     setCurrentName(event.target.value)
@@ -22,6 +25,7 @@ const AddContact = (props) => {
       name: currentName,
       number: currentNumber,
     }
+    console.log(newContact)
 
     var inList = false
     if (
