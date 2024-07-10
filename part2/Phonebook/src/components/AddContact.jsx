@@ -1,7 +1,7 @@
 import contactService from "../services/contacts"
 import { useState } from "react"
 
-const AddContact = (props) => {
+const AddContact = ({ contacts, setContacts, setNotification }) => {
   // var currentName = "" // why do we need states for this?
   // const setCurrentName = (newName) => (currentName = newName)
   // var currentNumber = ""
@@ -28,9 +28,7 @@ const AddContact = (props) => {
     console.log(newContact)
 
     var inList = false
-    if (
-      props.contacts.map((contact) => contact.name).includes(newContact.name)
-    ) {
+    if (contacts.map((contact) => contact.name).includes(newContact.name)) {
       inList = true
       if (
         !window.confirm(
@@ -43,36 +41,45 @@ const AddContact = (props) => {
     console.log(currentNumber)
 
     // ensure that the version in the browser corresponds to the version on server
-    var notificationText = ""
     if (inList) {
       console.log(
         `the number for ${newContact.name} is being replaced (to ${newContact.number})`
       )
       contactService
         .changeContact(
-          props.contacts.filter((c) => c.name === newContact.name)[0].id, // find the id of the contact with that name
+          contacts.filter((c) => c.name === newContact.name)[0].id, // find the id of the contact with that name
           newContact
         )
         .then((added) => {
           console.log(
-            props.contacts.map((c) => (c.name === newContact.name ? added : c))
+            contacts.map((c) => (c.name === newContact.name ? added : c))
           )
-          props.setContacts(
-            props.contacts.map((c) => (c.name === newContact.name ? added : c))
+          setContacts(
+            contacts.map((c) => (c.name === newContact.name ? added : c))
+          )
+          setNotification(
+            `The number of ${newContact.name} is set to ${newContact.number}`
           )
         })
-      notificationText = `The number of ${newContact.name} is set to ${newContact.number}`
+        .catch((error) => {
+          console.log(error)
+          setNotification(
+            `Error! Looks like the information about ${newContact.name} has already been deleted from the server.`
+          )
+          // todo: delete the old information then?
+          setContacts(contacts.filter((c) => c.name != newContact.name)) // name is assumed to be unique
+        })
     } else {
       console.log(newContact.name, "is being added")
       contactService
         .addContact(newContact)
-        .then((added) => props.setContacts(props.contacts.concat(added)))
-      notificationText = `${newContact.name} is added.`
+        .then((added) => setContacts(contacts.concat(added)))
+      setNotification(`${newContact.name} is added.`)
     }
+    console.log("got here")
 
-    props.setNotification(notificationText)
     setTimeout(() => {
-      props.setNotification(null)
+      setNotification(null)
     }, 5000)
     event.target.reset()
   }
