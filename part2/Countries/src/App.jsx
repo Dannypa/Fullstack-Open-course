@@ -1,18 +1,28 @@
 import { useState, useRef } from "react"
 import countryService from "./services/countries"
 
-const CountryShort = ({ country }) => {
-  return <p>{country.name.official}</p>
+const CountryShort = ({ country, setIsFull }) => {
+  return (
+    <p>
+      {country.name.official}{" "}
+      <button onClick={() => setIsFull(true)}>show</button>
+    </p>
+  )
 }
 
-const CountryFull = ({ country }) => {
+const CountryFull = ({ country, isHideable, setIsFull }) => {
   const languageList = Object.values(country.languages).map((l) => (
     <li key={l}>{l}</li>
   ))
-  console.log(country.flag.png)
+  const hideButton = isHideable ? (
+    <p>
+      <button onClick={() => setIsFull(false)}>hide</button>
+    </p>
+  ) : null
   return (
     <div>
       <h2>{country.name.official}</h2>
+      {hideButton}
       <div>
         Capital {country.capital[0]}, area {country.area}.{" "}
       </div>
@@ -23,7 +33,24 @@ const CountryFull = ({ country }) => {
   )
 }
 
+const CountryComponent = ({ isHideable, country }) => {
+  if (!isHideable) {
+    return <CountryFull {...{ country, isHideable }} />
+  } else {
+    const [isFull, setIsFull] = useState(false)
+    const args = { country, isHideable, setIsFull }
+    if (!isFull) {
+      return <CountryShort {...args} />
+    } else {
+      return <CountryFull {...args} />
+    }
+  }
+}
+
 const CountryList = ({ list, isLoaded, isFiltered }) => {
+  const [isOpened, setIsOpened] = useState(
+    Array(Math.min(list.length, 10)).fill(false)
+  )
   if (!isFiltered) {
     return <div>Start typing the name of the country</div>
   } else if (!isLoaded.current) {
@@ -31,12 +58,18 @@ const CountryList = ({ list, isLoaded, isFiltered }) => {
   } else if (list.length > 10) {
     return <div>Too many matches, specify another filter</div>
   } else if (list.length === 1) {
-    return <CountryFull country={list[0]} />
+    return (
+      <CountryComponent isFull={true} country={list[0]} isHideable={false} />
+    )
   } else {
     return (
       <div>
         {list.map((c) => (
-          <CountryShort key={c.name.official} country={c} />
+          <CountryComponent
+            key={c.name.official}
+            country={c}
+            isHideable={true}
+          />
         ))}
       </div>
     )
