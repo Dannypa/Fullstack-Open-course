@@ -1,5 +1,7 @@
 import { useState, useRef } from "react"
 import countryService from "./services/countries"
+import weatherService from "./services/weather"
+import { useEffect } from "react"
 
 const CountryShort = ({ country, setIsFull }) => {
   return (
@@ -19,6 +21,23 @@ const CountryFull = ({ country, isHideable, setIsFull }) => {
       <button onClick={() => setIsFull(false)}>hide</button>
     </p>
   ) : null
+
+  const [weather, setWeather] = useState(null)
+  useEffect(() => {
+    weatherService.getWeather(country.capitalInfo.latlng).then((w) => {
+      setWeather(
+        <div>
+          <p>The temperature is {w.current.temp_c} celcius.</p>
+          <img src={`https://${w.current.condition.icon.slice(2)}`} />{" "}
+          {/* slice cuz the returned url is prefixed by // */}
+          <p>
+            The wind is {Math.round((w.current.wind_kph / 3.6) * 100) / 100}{" "}
+            m/s.{" "}
+          </p>
+        </div>
+      )
+    })
+  }, [])
   return (
     <div>
       <h2>{country.name.official}</h2>
@@ -29,6 +48,9 @@ const CountryFull = ({ country, isHideable, setIsFull }) => {
       <h5>Languages:</h5>
       <ul>{languageList}</ul>
       <img src={country.flags.png} style={{ border: "solid" }} />
+
+      <h3>Weather at {country.capital[0]}:</h3>
+      {weather}
     </div>
   )
 }
