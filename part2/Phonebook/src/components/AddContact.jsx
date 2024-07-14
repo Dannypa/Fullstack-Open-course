@@ -17,12 +17,12 @@ const AddContact = ({
 
   const handleNameChange = (event) => {
     setCurrentName(event.target.value)
-    console.log("name is changed", event.target.value, currentName)
+    console.log("name is changed", event.target.value, currentName.current)
   }
 
   const handleNumberChange = (event) => {
     setCurrentNumber(event.target.value)
-    console.log("current number is now", currentNumber)
+    console.log("current number is now", currentNumber.current)
   }
 
   const addName = (event) => {
@@ -74,8 +74,7 @@ const AddContact = ({
             `Error! Looks like the information about ${newContact.name} has already been deleted from the server.`
           )
           setNotificationType("error")
-          // TODO: delete the old information then?
-          setContacts(contacts.filter((c) => c.name != newContact.name)) // name is assumed to be unique
+          setContacts(contacts.filter((c) => c.name !== newContact.name)) // name is assumed to be unique
         })
     } else {
       console.log(newContact.name, "is being added")
