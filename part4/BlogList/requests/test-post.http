@@ -1,0 +1,10 @@
+### Adding a new blog
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "a test blog",
+  "author": "my good friend rick",
+  "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "likes": 17000000
+}
