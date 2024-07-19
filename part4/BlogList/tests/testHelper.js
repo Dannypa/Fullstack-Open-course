@@ -85,9 +85,22 @@ const blogContent = (blog) => ({
     url: blog.url,
     likes:blog.likes })
 
+const areEqual = (
+    blog1,
+    blog2,
+    skipTitle = false,
+    skipAuthor = false,
+    skipUrl = false,
+    skipLikes = false
+) => (blog1.title === blog2.title || skipTitle)
+    && (blog1.author === blog2.author || skipAuthor)
+    && (blog1.url === blog2.url || skipUrl)
+    && (blog1.likes === blog2.likes || skipLikes)
+
 module.exports = {
     listWithOneBlog,
     noLikeBlogs,
     someBlogs,
-    blogContent
+    blogContent,
+    areEqual
 }

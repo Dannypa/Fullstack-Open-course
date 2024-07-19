@@ -38,7 +38,7 @@ test(`after adding a blog, get should return ${someBlogs.length + 1} blogs in js
     const blogs = response.body
 
     assert.strictEqual(blogs.length, someBlogs.length + 1)
-    assert(blogs.some(blog =>
+    assert(blogs.find(blog =>
         blog.title === blogToAdd.title
         && blog.author === blogToAdd.author
         && blog.url === blogToAdd.url
@@ -47,11 +47,27 @@ test(`after adding a blog, get should return ${someBlogs.length + 1} blogs in js
 })
 
 
-test.only('blogs returned should have the "id" property for the unique identifier instead of _id', async () => {
+test('blogs returned should have the "id" property for the unique identifier instead of _id', async () => {
     const response = await api.get('/api/blogs')
     const blog = response.body[0]
     assert(Object.hasOwn(blog,'id'))
     assert(!Object.hasOwn(blog,'_id'))
+})
+
+test('if blog is added with missing "likes" property it should default to 0', async () => {
+    // assuming blogToAdd has every other field and that there is at most one blog for every group <title, author, url>
+    const blogToAdd = listWithOneBlog[0]
+    delete blogToAdd.likes
+    assert(!Object.hasOwn(blogToAdd, 'likes'))
+    await (new Blog(blogToAdd)).save()
+
+    const response = await api.get('/api/blogs')
+    const added = response.body.find(blog =>
+        blog.title === blogToAdd.title
+        && blog.author === blogToAdd.author
+        && blog.url === blogToAdd.url) // do not check likes as there are no such field in blogToAdd
+    logger.info(added)
+    assert.strictEqual(added.likes, 0)
 })
 
 
