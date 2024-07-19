@@ -1,9 +1,9 @@
 const listWithOneBlog = [
     {
-        _id: '5a422aa71b54a676234d17f8',
-        title: 'Go To Statement Considered Harmful',
-        author: 'Edsger W. Dijkstra',
-        url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+        _id: '669ae84f4db5045ed3057cd1',
+        title: 'Check Out This Fire Post By Me!',
+        author: 'Rick',
+        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
         likes: 5,
         __v: 0
     }
@@ -79,4 +79,15 @@ const someBlogs = [
     }
 ]
 
-module.exports = { listWithOneBlog, noLikeBlogs, someBlogs }
+const blogContent = (blog) => ({
+    title: blog.title,
+    author: blog.author,
+    url: blog.url,
+    likes:blog.likes })
+
+module.exports = {
+    listWithOneBlog,
+    noLikeBlogs,
+    someBlogs,
+    blogContent
+}
