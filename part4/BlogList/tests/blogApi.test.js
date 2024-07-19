@@ -17,7 +17,7 @@ beforeEach(async () => {
     }
 })
 
-test.only(`get before adding blogs should return ${someBlogs.length} blogs in json format`, async () => {
+test(`get before adding blogs should return ${someBlogs.length} blogs in json format`, async () => {
     const response = await api
         .get('/api/blogs')
         .expect(200)
@@ -26,7 +26,7 @@ test.only(`get before adding blogs should return ${someBlogs.length} blogs in js
     assert.strictEqual(response.body.length, someBlogs.length)
 })
 
-test.only(`after adding a blog, get should return ${someBlogs.length + 1} blogs in json format 
+test(`after adding a blog, get should return ${someBlogs.length + 1} blogs in json format 
             and the added blog should be among them`, async () => {
     const blogToAdd = new Blog(listWithOneBlog[0])
     await blogToAdd.save()
