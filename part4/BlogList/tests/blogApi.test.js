@@ -47,6 +47,13 @@ test(`after adding a blog, get should return ${someBlogs.length + 1} blogs in js
 })
 
 
+test.only('blogs returned should have the "id" property for the unique identifier instead of _id', async () => {
+    const response = await api.get('/api/blogs')
+    const blog = response.body[0]
+    assert(Object.hasOwn(blog,'id'))
+    assert(!Object.hasOwn(blog,'_id'))
+})
+
 
 after(async () => {
     await mongoose.connection.close()
