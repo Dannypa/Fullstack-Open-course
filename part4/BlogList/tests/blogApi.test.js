@@ -20,7 +20,7 @@ describe('when getting blogs...', () => {
 
     test(`get before adding blogs should return ${someBlogs.length} blogs in json format`, async () => {
         const response = await api
-            .get(config.BASE_URL)
+            .get(config.BLOG_URL)
             .expect(200)
             .expect('Content-Type', /application\/json/)
 
@@ -28,7 +28,7 @@ describe('when getting blogs...', () => {
     })
 
     test('blogs returned should have the "id" property for the unique identifier instead of _id', async () => {
-        const response = await api.get(config.BASE_URL)
+        const response = await api.get(config.BLOG_URL)
         const blog = response.body[0]
         assert(Object.hasOwn(blog,'id'))
         assert(!Object.hasOwn(blog,'_id'))
@@ -43,7 +43,7 @@ describe('when adding blogs...', () => {
           after that, there should be ${someBlogs.length + 1} blogs stored in the db\
           and the added blog should be among them`, async () => {
         const blogToAdd = listWithOneBlog[0]
-        await api.post(config.BASE_URL)
+        await api.post(config.BLOG_URL)
             .send(blogToAdd)
             .expect(201)
 
@@ -83,14 +83,14 @@ describe('when adding blogs...', () => {
         let blogToAdd = listWithOneBlog[0]
         delete blogToAdd.title
 
-        await api.post(config.BASE_URL).send(blogToAdd).expect(400)
+        await api.post(config.BLOG_URL).send(blogToAdd).expect(400)
 
         // try with no url
         blogToAdd = listWithOneBlog[0]
         logger.info(blogToAdd)
         delete blogToAdd.url
 
-        await api.post(config.BASE_URL).send(blogToAdd).expect(400)
+        await api.post(config.BLOG_URL).send(blogToAdd).expect(400)
 
         const response = await Blog.find({})
         assert.strictEqual(response.length, someBlogs.length)
@@ -103,7 +103,7 @@ describe('when deleting a blog...', () => {
 
     describe('that previously was in the database...', () => {
         beforeEach(async () => {
-            await api.delete(`${config.BASE_URL}/${idToDelete}`).expect(204)
+            await api.delete(`${config.BLOG_URL}/${idToDelete}`).expect(204)
         })
 
         test('the removed blog should not be in the database', async () => {
@@ -120,7 +120,7 @@ describe('when deleting a blog...', () => {
 
     describe('that was not in the database', () => {
         beforeEach(async () => {
-            await api.delete(`${config.BASE_URL}/${nonExistingId}`).expect(204)
+            await api.delete(`${config.BLOG_URL}/${nonExistingId}`).expect(204)
         })
 
         test('the number of the blogs should not change', async () => {
@@ -134,7 +134,7 @@ describe('when deleting a blog...', () => {
 const checkNoChange = async (idToChange, changedBlog) => {
     const oldData = await Blog.findById(idToChange)
     await api
-        .put(`${config.BASE_URL}/${idToChange}`)
+        .put(`${config.BLOG_URL}/${idToChange}`)
         .send(changedBlog)
         .expect(400)
     const dataAfterChange = await Blog.findById(idToChange)
@@ -150,7 +150,7 @@ describe('when changing a blog...', () => {
             const idToChange = changedFirstBlog._id
 
             const response = await api
-                .put(`${config.BASE_URL}/${idToChange}`)
+                .put(`${config.BLOG_URL}/${idToChange}`)
                 .send(changedFirstBlog)
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
@@ -165,7 +165,7 @@ describe('when changing a blog...', () => {
             const idToChange = changedFirstBlog._id
 
             await api
-                .put(`${config.BASE_URL}/${idToChange}`)
+                .put(`${config.BLOG_URL}/${idToChange}`)
                 .send(changedFirstBlog)
 
             const blogs = await Blog.find({})

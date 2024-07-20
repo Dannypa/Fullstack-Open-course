@@ -1,0 +1,9 @@
+### Adding a new user
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "dannypa",
+  "name": "Daniil Parniukov",
+  "password": "секрет"
+}
