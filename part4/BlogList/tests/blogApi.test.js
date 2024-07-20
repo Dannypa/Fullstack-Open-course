@@ -1,5 +1,6 @@
 const logger = require('../utils/logger')
-const { test, describe, after, beforeEach, before } = require('node:test')
+const config = require('../utils/config')
+const { test, describe, after, beforeEach } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -12,16 +13,14 @@ const Blog = require('../models/blog')
 beforeEach(async () => {
     await Blog.deleteMany({}) // this will be catastrophic if run in prod...
 
-    for (const blog of someBlogs) {
-        await new Blog(blog).save()
-    }
+    await Blog.insertMany(someBlogs.map(b => new Blog(b)))
 })
 
 describe('when getting blogs...', () => {
 
     test(`get before adding blogs should return ${someBlogs.length} blogs in json format`, async () => {
         const response = await api
-            .get('/api/blogs')
+            .get(config.BASE_URL)
             .expect(200)
             .expect('Content-Type', /application\/json/)
 
@@ -29,7 +28,7 @@ describe('when getting blogs...', () => {
     })
 
     test('blogs returned should have the "id" property for the unique identifier instead of _id', async () => {
-        const response = await api.get('/api/blogs')
+        const response = await api.get(config.BASE_URL)
         const blog = response.body[0]
         assert(Object.hasOwn(blog,'id'))
         assert(!Object.hasOwn(blog,'_id'))
@@ -41,26 +40,22 @@ describe('when getting blogs...', () => {
 describe('when adding blogs...', () => {
 
     test(`it is possible to successfully add a blog; \
-          after that, get should return ${someBlogs.length + 1} blogs in json format\
+          after that, there should be ${someBlogs.length + 1} blogs stored in the db\
           and the added blog should be among them`, async () => {
         const blogToAdd = listWithOneBlog[0]
-        await api.post('/api/blogs')
+        await api.post(config.BASE_URL)
             .send(blogToAdd)
             .expect(201)
 
-        const response = await api
-            .get('/api/blogs')
-            .expect(200)
-            .expect('Content-Type', /application\/json/)
-        const blogs = response.body
+        const blogs = await Blog.find({})
 
         assert.strictEqual(blogs.length, someBlogs.length + 1)
-        assert(blogs.find(blog =>
-            blog.title === blogToAdd.title
-            && blog.author === blogToAdd.author
-            && blog.url === blogToAdd.url
-            && blog.likes === blogToAdd.likes
-        ))
+        assert(Blog.find({
+            title: blogToAdd.title,
+            author: blogToAdd.author,
+            url: blogToAdd.url,
+            likes: blogToAdd.likes
+        }))
     })
 
 
@@ -71,33 +66,34 @@ describe('when adding blogs...', () => {
         assert(!Object.hasOwn(blogToAdd, 'likes'))
         await (new Blog(blogToAdd)).save()
 
-        const response = await api.get('/api/blogs') // todo: change so that the query is to the db
-        const added = response.body.find(blog =>
-            blog.title === blogToAdd.title
-            && blog.author === blogToAdd.author
-            && blog.url === blogToAdd.url) // do not check likes as there are no such field in blogToAdd
+        // do not check likes as there are no such field in blogToAdd
+        const added = await Blog.find({
+            title: blogToAdd.title,
+            author: blogToAdd.author,
+            url: blogToAdd.url
+        })
         logger.info(added)
-        assert.strictEqual(added.likes, 0)
+        assert.strictEqual(added[0].likes, 0)
     })
 
 
     test('if addition of a blog with missing title or url is attempted, ' +
-         'the response code should be 400 and no blogs should be added', async () => {
+         'the response code should be 400 and no blogs should be added to the db', async () => {
         // try with no title
         let blogToAdd = listWithOneBlog[0]
         delete blogToAdd.title
 
-        await api.post('/api/blogs').send(blogToAdd).expect(400)
+        await api.post(config.BASE_URL).send(blogToAdd).expect(400)
 
         // try with no url
         blogToAdd = listWithOneBlog[0]
         logger.info(blogToAdd)
         delete blogToAdd.url
 
-        await api.post('/api/blogs').send(blogToAdd).expect(400)
+        await api.post(config.BASE_URL).send(blogToAdd).expect(400)
 
-        const response = await api.get('/api/blogs').expect(200)
-        assert.strictEqual(response.body.length, someBlogs.length)
+        const response = await Blog.find({})
+        assert.strictEqual(response.length, someBlogs.length)
     })
 
 })
@@ -107,7 +103,7 @@ describe('when deleting a blog...', () => {
 
     describe('that previously was in the database...', () => {
         beforeEach(async () => {
-            await api.delete(`/api/blogs/${idToDelete}`).expect(204)
+            await api.delete(`${config.BASE_URL}/${idToDelete}`).expect(204)
         })
 
         test('the removed blog should not be in the database', async () => {
@@ -124,7 +120,7 @@ describe('when deleting a blog...', () => {
 
     describe('that was not in the database', () => {
         beforeEach(async () => {
-            await api.delete(`/api/blogs/${nonExistingId}`).expect(204)
+            await api.delete(`${config.BASE_URL}/${nonExistingId}`).expect(204)
         })
 
         test('the number of the blogs should not change', async () => {
