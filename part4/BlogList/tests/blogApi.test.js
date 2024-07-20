@@ -4,7 +4,7 @@ const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const { someBlogs, listWithOneBlog, blogContent } = require('./testHelper')
+const { someBlogs, listWithOneBlog } = require('./testHelper')
 
 const api = supertest(app)
 
@@ -26,10 +26,11 @@ test(`get before adding blogs should return ${someBlogs.length} blogs in json fo
     assert.strictEqual(response.body.length, someBlogs.length)
 })
 
-test(`after adding a blog, get should return ${someBlogs.length + 1} blogs in json format 
-            and the added blog should be among them`, async () => {
-    const blogToAdd = new Blog(listWithOneBlog[0])
-    await blogToAdd.save()
+test(`it is possible to successfully add a blog; after that, get should return ${someBlogs.length + 1} blogs in json format and the added blog should be among them`, async () => {
+    const blogToAdd = listWithOneBlog[0]
+    await api.post('/api/blogs')
+        .send(blogToAdd)
+        .expect(201)
 
     const response = await api
         .get('/api/blogs')
@@ -70,6 +71,23 @@ test('if blog is added with missing "likes" property it should default to 0', as
     assert.strictEqual(added.likes, 0)
 })
 
+test('if addition of a blog with missing title or url is attempted, the response code should be 400 and no blogs are added', async () => {
+    // try with no title
+    let blogToAdd = listWithOneBlog[0]
+    delete blogToAdd.title
+
+    await api.post('/api/blogs').send(blogToAdd).expect(400)
+
+    // try with no url
+    blogToAdd = listWithOneBlog[0]
+    logger.info(blogToAdd)
+    delete blogToAdd.url
+
+    await api.post('/api/blogs').send(blogToAdd).expect(400)
+
+    const response = await api.get('/api/blogs').expect(200)
+    assert.strictEqual(response.body.length, someBlogs.length)
+})
 
 after(async () => {
     await mongoose.connection.close()

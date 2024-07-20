@@ -1,6 +1,6 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
-const logger = require('../utils/logger')
+// const logger = require('../utils/logger')
 
 blogRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({})
