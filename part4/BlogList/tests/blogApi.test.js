@@ -5,7 +5,7 @@ const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const { someBlogs, listWithOneBlog, idToDelete, nonExistingId } = require('./testHelper')
+const { someBlogs, listWithOneBlog, idToDelete, nonExistingId, blogToAdd, changedFirstBlog, areEqual, blogCopy } = require('./testHelper')
 
 const api = supertest(app)
 
@@ -127,6 +127,62 @@ describe('when deleting a blog...', () => {
             const blogsLeft = await Blog.find({})
             assert.strictEqual(blogsLeft.length, someBlogs.length)
         })
+    })
+})
+
+
+const checkNoChange = async (idToChange, changedBlog) => {
+    const oldData = await Blog.findById(idToChange)
+    await api
+        .put(`${config.BASE_URL}/${idToChange}`)
+        .send(changedBlog)
+        .expect(400)
+    const dataAfterChange = await Blog.findById(idToChange)
+    assert(areEqual(oldData, dataAfterChange))
+}
+
+describe('when changing a blog...', () => {
+
+    describe('so that the new blog is valid', () => {
+
+        test('the blog with the provided id should change in the db' +
+            'and the new blog should be returned in a json format', async () => {
+            const idToChange = changedFirstBlog._id
+
+            const response = await api
+                .put(`${config.BASE_URL}/${idToChange}`)
+                .send(changedFirstBlog)
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+
+            const changed = response.body
+            assert(areEqual(changed, changedFirstBlog))
+            const changedBlogInDb = await Blog.findById(idToChange)
+            assert(areEqual(changedBlogInDb, changedFirstBlog))
+        })
+
+        test('the number of blogs should stay the same', async () => {
+            const idToChange = changedFirstBlog._id
+
+            await api
+                .put(`${config.BASE_URL}/${idToChange}`)
+                .send(changedFirstBlog)
+
+            const blogs = await Blog.find({})
+            assert.strictEqual(blogs.length, someBlogs.length)
+        })
+
+    })
+
+    test('so that the id of the new blog is different from the original,' +
+        'the server should response with code 400 ' +
+        'and the blog in the db should not change', async () => {
+        const idToChange = changedFirstBlog._id
+        const changedBlogCopy = blogCopy(changedFirstBlog)
+        changedBlogCopy._id = blogToAdd._id
+        // ^ it is not in the db at this point, so there are no issues with duplicated ids
+
+        await checkNoChange(idToChange, changedBlogCopy)
     })
 })
 

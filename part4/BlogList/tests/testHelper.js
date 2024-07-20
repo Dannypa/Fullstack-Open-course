@@ -81,6 +81,19 @@ const someBlogs = [
     }
 ]
 
+const blogCopy = (blog) => ({
+    _id: blog._id,
+    title: blog.title,
+    author: blog.author,
+    url: blog.url,
+    likes: blog.likes,
+    __v: blog.__v
+})
+
+const changedFirstBlog = blogCopy(someBlogs[0])
+changedFirstBlog.likes *= 2
+changedFirstBlog.title = 'Brand new title'
+
 const idToDelete = someBlogs[0]._id
 const nonExistingId = '5a422bc61b54a676234d17f0'
 
@@ -102,12 +115,16 @@ const areEqual = (
     && (blog1.url === blog2.url || skipUrl)
     && (blog1.likes === blog2.likes || skipLikes)
 
+
 module.exports = {
     listWithOneBlog,
     noLikeBlogs,
     someBlogs,
     idToDelete,
     nonExistingId,
+    blogToAdd,
+    changedFirstBlog,
     blogContent,
+    blogCopy,
     areEqual
 }
