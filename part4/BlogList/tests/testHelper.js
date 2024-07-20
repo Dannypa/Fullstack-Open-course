@@ -81,6 +81,9 @@ const someBlogs = [
     }
 ]
 
+const idToDelete = someBlogs[0]._id
+const nonExistingId = '5a422bc61b54a676234d17f0'
+
 const blogContent = (blog) => ({
     title: blog.title,
     author: blog.author,
@@ -103,6 +106,8 @@ module.exports = {
     listWithOneBlog,
     noLikeBlogs,
     someBlogs,
+    idToDelete,
+    nonExistingId,
     blogContent,
     areEqual
 }
