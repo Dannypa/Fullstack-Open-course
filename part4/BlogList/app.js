@@ -18,7 +18,7 @@ mongoose.connect(mongoUri)
     })
 
 app.use(express.json())
-app.use('/api/blogs', blogRouter)
+app.use(config.BASE_URL, blogRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
