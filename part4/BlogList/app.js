@@ -19,9 +19,8 @@ mongoose.connect(mongoUri)
         logger.info(`Error when connecting to the db: ${error.message}`)
     })
 
-app.use(middleware.tokenExtractor)
 app.use(express.json())
-app.use(config.BLOG_URL, blogRouter)
+app.use(config.BLOG_URL, middleware.userExtractor, blogRouter)
 app.use(config.USER_URL, userRouter)
 app.use(config.LOGIN_URL, loginRouter)
 

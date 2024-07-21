@@ -9,12 +9,10 @@ blogRouter.get('/', async (request, response) => {
     response.json(blogs)
 })
 
+
 blogRouter.post('/', async (request, response) => {
-    const tokenData = jwt.verify(request.token, process.env.SECRET)
-    if (!tokenData.id) {
-        response.status(401).json({ error: 'token invalid' })
-    }
-    const userId = tokenData.id
+    const userId = request.user
+    if (!userId) return
 
     const blog = new Blog(request.body)
     blog.user = userId
@@ -26,7 +24,15 @@ blogRouter.post('/', async (request, response) => {
 })
 
 blogRouter.delete('/:id', async (request, response) => {
+    const userId = request.user
+    if (!userId) return
+
     const rid = request.params.id
+    const blogToDelete = await Blog.findById(rid)
+
+    if (blogToDelete.user.toString() !== userId.toString()) {
+        return response.status(401).json({ error: 'only the creator can delete a post' })
+    }
 
     await Blog.findByIdAndDelete(rid)
     response.status(204).end()
