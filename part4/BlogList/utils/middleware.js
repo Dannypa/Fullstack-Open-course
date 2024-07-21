@@ -7,14 +7,16 @@ const unknownEndpoint = (req, resp) => {
 
 const userExtractor = (req, resp, next) => {
     const auth = req.get('authorization')
-    if (auth && auth.startsWith('Bearer ')) {
-        const token = auth.replace('Bearer ', '')
-        const tokenData = jwt.verify(token, process.env.SECRET)
-        if (!tokenData.id) {
-            return
-        }
-        req.user = tokenData.id
+    if (!auth || !auth.startsWith('Bearer ')) {
+        return resp.status(401).json({ error: 'a valid token must be provided' })
     }
+    const token = auth.replace('Bearer ', '')
+    const tokenData = jwt.verify(token, process.env.SECRET)
+    if (!tokenData.id) {
+        return resp.status(401).json({ error: 'a valid token must be provided' })
+    }
+    req.user = tokenData.id
+
     next()
 }
 

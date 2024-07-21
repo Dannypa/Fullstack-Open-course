@@ -5,15 +5,20 @@ const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../../app')
+const User = require('../../models/user')
 const { someBlogs, listWithOneBlog, idToDelete, nonExistingId, blogToAdd, changedFirstBlog, areEqual, blogCopy } = require('./blogTestHelper')
+const uh = require('../userTestHelper')
 
 const api = supertest(app)
 
 const Blog = require('../../models/blog')
 beforeEach(async () => {
     await Blog.deleteMany({}) // this will be catastrophic if run in prod...
+    await User.deleteMany({})
+
 
     await Blog.insertMany(someBlogs.map(b => new Blog(b)))
+    await User.insertMany(uh.initialUsersInDb)
 })
 
 describe('when getting blogs...', () => {
@@ -37,15 +42,31 @@ describe('when getting blogs...', () => {
 })
 
 
+const successfullAdditionCheck = async (blog) => {
+    await api.post(config.BLOG_URL)
+        .set('Authorization', `Bearer ${token}`)
+        .send(blog) // todo: sad that blogToAdd is a global variable.
+        .expect(201)
+}
+
+let token = ''
+const setToken = async () => {
+    // I have no other option then to make an api request I think
+    const response = await api
+        .post(config.LOGIN_URL)
+        .send(uh.theAuthor)
+    token = response.body.token
+}
+
 describe('when adding blogs...', () => {
 
-    test(`it is possible to successfully add a blog; \
+    beforeEach(setToken)
+
+    test(`it is possible to successfully add a blog when a user is logged in; \
           after that, there should be ${someBlogs.length + 1} blogs stored in the db\
           and the added blog should be among them`, async () => {
         const blogToAdd = listWithOneBlog[0]
-        await api.post(config.BLOG_URL)
-            .send(blogToAdd)
-            .expect(201)
+        await successfullAdditionCheck(blogToAdd)
 
         const blogs = await Blog.find({})
 
@@ -61,10 +82,10 @@ describe('when adding blogs...', () => {
 
     test('if blog is added with missing "likes" property it should default to 0', async () => {
         // assuming blogToAdd has every other field and that there is at most one blog for every group <title, author, url>
-        const blogToAdd = listWithOneBlog[0]
+        const blogToAdd = blogCopy(listWithOneBlog[0])
         delete blogToAdd.likes
         assert(!Object.hasOwn(blogToAdd, 'likes'))
-        await (new Blog(blogToAdd)).save()
+        await successfullAdditionCheck(blogToAdd)
 
         // do not check likes as there are no such field in blogToAdd
         const added = await Blog.find({
@@ -80,53 +101,75 @@ describe('when adding blogs...', () => {
     test('if addition of a blog with missing title or url is attempted, ' +
          'the response code should be 400 and no blogs should be added to the db', async () => {
         // try with no title
-        let blogToAdd = listWithOneBlog[0]
+        let blogToAdd = blogCopy(listWithOneBlog[0])
         delete blogToAdd.title
 
-        await api.post(config.BLOG_URL).send(blogToAdd).expect(400)
+        await api.post(config.BLOG_URL).set('Authorization', `Bearer ${token}`).send(blogToAdd).expect(400)
 
         // try with no url
-        blogToAdd = listWithOneBlog[0]
-        logger.info(blogToAdd)
+        blogToAdd = blogCopy(listWithOneBlog[0])
         delete blogToAdd.url
 
-        await api.post(config.BLOG_URL).send(blogToAdd).expect(400)
+        await api.post(config.BLOG_URL).set('Authorization', `Bearer ${token}`).send(blogToAdd).expect(400)
 
         const response = await Blog.find({})
         assert.strictEqual(response.length, someBlogs.length)
     })
 
+    test('it is not possible to add blog with no token', async () => {
+        await api
+            .post(config.BLOG_URL)
+            .send(blogToAdd)
+            .expect(401)
+    })
+
+    test('it is not possible to add blog with an invalid token', async () => {
+        await api
+            .post(config.BLOG_URL)
+            .set('Authorization', 'Bearer 123')
+            .expect(401)
+    })
+
 })
 
 
-describe('when deleting a blog...', () => {
+const checkConstBlogNumber = async () => {
+    const blogsLeft = await Blog.find({})
+    assert.strictEqual(blogsLeft.length, someBlogs.length)
+}
 
-    describe('that previously was in the database...', () => {
-        beforeEach(async () => {
-            await api.delete(`${config.BLOG_URL}/${idToDelete}`).expect(204)
-        })
+const deleteBlogAuth = async (id) => {
+    await api.delete(`${config.BLOG_URL}/${id}`).set('Authorization', `Bearer ${token}`).expect(204)
+}
 
-        test('the removed blog should not be in the database', async () => {
+describe.only('when deleting a blog...', () => {
+    beforeEach(setToken)
+
+    describe.only('that previously was in the database...', () => {
+        beforeEach(async () => await deleteBlogAuth(idToDelete))
+
+        test.only('the removed blog should not be in the database', async () => {
             const removedBlog = await Blog.findById(idToDelete)
-            logger.info(removedBlog)
+            console.log(removedBlog)
             assert.strictEqual(removedBlog, null)
         })
 
-        test('the number of blogs should decrease by 1', async () => {
+        test.only('the number of blogs should decrease by 1', async () => {
             const blogsLeft = await Blog.find({})
             assert.strictEqual(blogsLeft.length, someBlogs.length - 1)
         })
     })
 
-    describe('that was not in the database', () => {
-        beforeEach(async () => {
-            await api.delete(`${config.BLOG_URL}/${nonExistingId}`).expect(204)
-        })
+    describe.only('that was not in the database', () => {
+        beforeEach(async () => await deleteBlogAuth(nonExistingId))
 
-        test('the number of the blogs should not change', async () => {
-            const blogsLeft = await Blog.find({})
-            assert.strictEqual(blogsLeft.length, someBlogs.length)
-        })
+        test.only('the number of the blogs should not change', checkConstBlogNumber)
+    })
+
+    describe('while not authenticated, the server should send code 401 and ', () => {
+        beforeEach(async () => await api.delete(`${config.BLOG_URL}/${idToDelete}`).expect(401))
+
+        test('the number of the blogs should not change', checkConstBlogNumber)
     })
 })
 

@@ -4,9 +4,9 @@ const assert = require('node:assert')
 const supertest = require('supertest')
 const app = require('../../app')
 const User = require('../../models/user')
-const uh = require('./userTestHelper')
+const uh = require('../userTestHelper')
 const mongoose = require('mongoose')
-const { validUserToAdd } = require('./userTestHelper')
+const { validUserToAdd } = require('../userTestHelper')
 
 const api = supertest(app)
 

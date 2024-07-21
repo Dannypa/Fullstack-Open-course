@@ -13,7 +13,7 @@ loginRouter.post('/', async (req, resp) => {
     const passwordCheck = savedUser ?
         await bcrypt.compare(password, savedUser.passwordHash) : false
     if (!passwordCheck) {
-        resp.status(400).json({ error: 'wrong username or password' })
+        resp.status(401).json({ error: 'wrong username or password' })
     }
 
     const token = jwt.sign({

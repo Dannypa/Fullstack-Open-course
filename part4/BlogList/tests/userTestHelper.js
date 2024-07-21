@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const config = require('../../utils/config')
+const config = require('../utils/config')
 
 const hashUser = (user) => ({
     username: user.username,
@@ -23,9 +23,32 @@ const initialUsers = [{
     username: 'dannypa',
     name: 'Daniil Parniukov',
     password: 'секрет'
-}]
+},
+{
+    username: 'xxx_dominator_xxx',
+    name: 'Will French',
+    password: '123 damn that\'s so not secure'
+}
+]
+
+const theAuthor = initialUsers[0]
 
 const initialUsersHashed = initialUsers.map(user => hashUser(user))
+
+const initialUsersInDb = [
+    { '_id':'669d316bcddca562b5a0d38a',
+        'username':'dannypa',
+        'name':'Daniil Parniukov',
+        'passwordHash':'$2b$10$0lNNJXkA7PPFthdpU7NsJed3ty3y75oS3Rd9k3x0SZhhKLzcO8LGW',
+        // 'blogs':[],
+    },
+    { '_id':'669d316bcddca562b5a0d38b',
+        'username':'xxx_dominator_xxx',
+        'name':'Will French',
+        'passwordHash':'$2b$10$As1ZdN5yXM247yFAI0toZ.Dd6HgyNEi2vWa3sJ4Z/RJLrWJWkKcZm',
+        // 'blogs':[]
+    }
+]
 
 const validUserToAdd = {
     username: 'tourist',
@@ -65,6 +88,7 @@ const noPasswordUser = {
 
 module.exports = {
     initialUsers,
+    initialUsersInDb,
     initialUsersHashed,
     validUserToAdd,
     validUserToAddHashed,
@@ -73,6 +97,7 @@ module.exports = {
     duplicateUsernameUser,
     noUsernameUser,
     noPasswordUser,
+    theAuthor,
     hashUser,
     isHashed,
     areEqual
