@@ -1,15 +1,15 @@
-const logger = require('../utils/logger')
-const config = require('../utils/config')
+const logger = require('../../utils/logger')
+const config = require('../../utils/config')
 const { test, describe, after, beforeEach } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const app = require('../app')
-const { someBlogs, listWithOneBlog, idToDelete, nonExistingId, blogToAdd, changedFirstBlog, areEqual, blogCopy } = require('./testHelper')
+const app = require('../../app')
+const { someBlogs, listWithOneBlog, idToDelete, nonExistingId, blogToAdd, changedFirstBlog, areEqual, blogCopy } = require('./blogTestHelper')
 
 const api = supertest(app)
 
-const Blog = require('../models/blog')
+const Blog = require('../../models/blog')
 beforeEach(async () => {
     await Blog.deleteMany({}) // this will be catastrophic if run in prod...
 
