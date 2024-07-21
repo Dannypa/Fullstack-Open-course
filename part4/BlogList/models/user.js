@@ -11,7 +11,13 @@ const userSchema = new mongoose.Schema({
         unique: true // todo: according to the docs (https://mongoosejs.com/docs/validation.html), this is bad practice
     },
     name: String,
-    passwordHash: String
+    passwordHash: String,
+    blogs: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Blog'
+        }
+    ]
 })
 
 userSchema.set('toJSON', {

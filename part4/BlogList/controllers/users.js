@@ -18,7 +18,7 @@ userRouter.post('/', async (req, resp) => {
 })
 
 userRouter.get('/', async (req, resp) => {
-    const users = await User.find({})
+    const users = await User.find({}).populate('blogs')
     resp.json(users)
 })
 
