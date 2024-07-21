@@ -1,2 +1,2 @@
 ### Getting all the users
-GET https://localhost:3003/api/users
+GET http://localhost:3003/api/users
