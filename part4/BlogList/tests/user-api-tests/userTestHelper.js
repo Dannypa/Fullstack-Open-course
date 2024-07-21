@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const config = require('../utils/config')
+const config = require('../../utils/config')
 
 const hashUser = (user) => ({
     username: user.username,
