@@ -1,7 +1,15 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-    username: String,
+    username: {
+        type: String,
+        required: [true, 'username is required'],
+        validate: {
+            validator: (v) => v.length >= 3,
+            message: 'invalid username',
+        },
+        unique: true // todo: according to the docs (https://mongoosejs.com/docs/validation.html), this is bad practice
+    },
     name: String,
     passwordHash: String
 })

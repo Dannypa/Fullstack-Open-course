@@ -25,11 +25,7 @@ const initialUsers = [{
     password: 'секрет'
 }]
 
-const initialUsersHashed = [{
-    username: 'dannypa',
-    name: 'Daniil Parniukov',
-    passwordHash: '$2b$10$Psn/MaT1X5NpHk/x/EVW8ulY0XHI3YOHvLvx7Vn2sheqn554urVWq'
-}]
+const initialUsersHashed = initialUsers.map(user => hashUser(user))
 
 const validUserToAdd = {
     username: 'tourist',
@@ -39,11 +35,44 @@ const validUserToAdd = {
 
 const validUserToAddHashed = hashUser(validUserToAdd)
 
+const invalidUsernameUser = {
+    username: 'to',
+    name: 'Gennady Korotkevich',
+    password: 'super secret'
+}
+
+const invalidPasswordUser = {
+    username: 'tourist',
+    name: 'Gennady Korotkevich',
+    password: 'su'
+}
+
+const duplicateUsernameUser = {
+    username: 'dannypa',
+    name: 'Daniil Parniukov',
+    password: 'секрет'
+}
+
+const noUsernameUser = {
+    name: 'Gennady Korotkevich',
+    password: 'super secret'
+}
+
+const noPasswordUser = {
+    username: 'tourist',
+    name: 'Gennady Korotkevich'
+}
+
 module.exports = {
     initialUsers,
     initialUsersHashed,
     validUserToAdd,
     validUserToAddHashed,
+    invalidUsernameUser,
+    invalidPasswordUser,
+    duplicateUsernameUser,
+    noUsernameUser,
+    noPasswordUser,
     hashUser,
     isHashed,
     areEqual

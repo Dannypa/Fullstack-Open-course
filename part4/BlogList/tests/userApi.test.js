@@ -16,7 +16,24 @@ beforeEach(async () => {
     await User.insertMany(uh.initialUsersHashed)
 })
 
-describe('adding users', () => {
+const testInvalid = (errorMessage, invalidUser) => {
+    test.only(`the server returns status 400 and the error message "${errorMessage}"`, async () => {
+        const response = await api
+            .post(config.USER_URL)
+            .send(invalidUser)
+            .expect(400)
+        assert(response.body.error.includes(errorMessage))
+    })
+
+    test.only('no users are added to the db', async () => {
+        await api
+            .post(config.USER_URL)
+            .send(invalidUser)
+        assert.strictEqual((await User.find({})).length, uh.initialUsers.length)
+    })
+}
+
+describe.only('adding users', () => {
     describe('valid user', () => {
 
         test('it is possible to add a user with valid information,' +
@@ -44,6 +61,30 @@ describe('adding users', () => {
             assert(uh.isHashed(uh.validUserToAdd, search[0]))
             assert.strictEqual((await User.find({})).length, uh.initialUsers.length + 1)
         })
+    })
+
+    describe.only('invalid user', () => {
+
+        describe.only('when adding a user with a username shorter then 3 characters', () =>
+            testInvalid('invalid username', uh.invalidUsernameUser)
+        )
+
+        describe.only('when adding a user with a password shorter then 3 characters', () =>
+            testInvalid('invalid password', uh.invalidPasswordUser)
+        )
+
+        describe.only('when adding a user with no username', () =>
+            testInvalid('username is required', uh.noUsernameUser)
+        )
+
+        describe.only('when adding a user with no password', () =>
+            testInvalid('password is required', uh.noPasswordUser)
+        )
+
+        describe.only('when adding a user with a username which is not unique', () => {
+            testInvalid('usernames must be unique', uh.duplicateUsernameUser)
+        })
+
     })
 })
 

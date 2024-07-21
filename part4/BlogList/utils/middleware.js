@@ -9,6 +9,8 @@ const errorHandler = (error, req, resp, next) => {
 
     if (error.name === 'ValidationError') {
         return resp.status(400).json({ error: error.message })
+    } else if (error.name === 'MongoServerError' && error.message.includes('E11000 duplicate key error')) {
+        return resp.status(400).json({ error: 'usernames must be unique' })
     }
 
     next(error)
