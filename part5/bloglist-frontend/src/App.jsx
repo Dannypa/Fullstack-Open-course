@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
+import loginService from './services/login'
 
 const LogInForm = ({ setUser }) => {
     const username = useRef('')
@@ -10,9 +11,25 @@ const LogInForm = ({ setUser }) => {
     const password = useRef('')
     const setPassword = (value) => password.current = value
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
-        setUser({ name: 'Ivan' })
+
+        try {
+            const result = await loginService.login({
+                username: username.current,
+                password: password.current
+            })
+
+            if (!result.token) {
+                console.log('invalid credentials')
+                return
+            }
+
+            setUser(result)
+        } catch (e) {
+            console.log(e)
+            console.log('invalid credentials')
+        }
     }
 
     const passwordChange = (event) => {
