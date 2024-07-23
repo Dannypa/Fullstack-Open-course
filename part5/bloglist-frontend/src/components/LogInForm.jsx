@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import loginService from '../services/login.js'
 
-const LogInForm = ({ setUser }) => {
+const LogInForm = ({ setUser, handleNotificationChange }) => {
     const username = useRef('')
     const setUsername = (value) => {
         username.current = value
@@ -25,9 +25,10 @@ const LogInForm = ({ setUser }) => {
 
             window.localStorage.setItem('user', JSON.stringify(result))
             setUser(result)
+            handleNotificationChange('Successfully logged in!')
         } catch (e) {
             console.log(e)
-            console.log('invalid credentials')
+            handleNotificationChange('Wrong username or password!')
         }
     }
 

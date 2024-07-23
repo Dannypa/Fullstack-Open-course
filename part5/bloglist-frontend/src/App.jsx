@@ -2,10 +2,19 @@ import { useState, useEffect } from 'react'
 import blogService from './services/blogs'
 import LogInForm from './components/LogInForm.jsx'
 import BlogList from './components/BlogList.jsx'
+import Notification from './components/Notification.jsx'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
     const [user, setUser] = useState(null)
+    const [notificationMessage, setNotificationMessage] = useState(null)
+
+    const handleNotificationChange = (message) => {
+        setNotificationMessage(message)
+        setTimeout(() => {
+            setNotificationMessage(null)
+        }, 5000)
+    }
 
     const reloadBlogs = () => {
         blogService.getAll().then(blogs =>
@@ -24,9 +33,10 @@ const App = () => {
 
     return (
         <div>
+            <Notification message={notificationMessage}/>
             {user === null ?
-                <LogInForm setUser={setUser}/> :
-                <BlogList name={user.name} {...{ blogs, reloadBlogs, user, setUser }} />}
+                <LogInForm {...{ setUser, handleNotificationChange }}/> :
+                <BlogList name={user.name} {...{ blogs, reloadBlogs, user, setUser, handleNotificationChange }} />}
         </div>
     )
 }
