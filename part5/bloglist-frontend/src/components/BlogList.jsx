@@ -12,4 +12,4 @@ const BlogList = ({ name, blogs }) => {
     )
 }
 
-export default { BlogList }
+export default BlogList

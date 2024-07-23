@@ -23,6 +23,7 @@ const LogInForm = ({ setUser }) => {
                 return
             }
 
+            window.localStorage.setItem('user', JSON.stringify(result))
             setUser(result)
         } catch (e) {
             console.log(e)
@@ -49,8 +50,7 @@ const LogInForm = ({ setUser }) => {
                 <div>
                     password:{' '}
                     <input
-                        name='Password'
-                        type='text'
+                        type='password'
                         onChange={passwordChange}
                     />
                 </div>
@@ -60,4 +60,4 @@ const LogInForm = ({ setUser }) => {
     )
 }
 
-export default { LogInForm }
+export default LogInForm
