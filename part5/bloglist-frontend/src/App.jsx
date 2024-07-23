@@ -22,7 +22,7 @@ const App = () => {
         <div>
             {user === null ?
                 <LogInForm setUser={setUser}/> :
-                <BlogList name={user.name} blogs={blogs}/>}
+                <BlogList name={user.name} blogs={blogs} setUser={setUser} />}
         </div>
     )
 }
