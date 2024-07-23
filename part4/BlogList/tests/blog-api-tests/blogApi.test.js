@@ -58,7 +58,7 @@ const setToken = async () => {
     token = response.body.token
 }
 
-describe('when adding blogs...', () => {
+describe('when adding blogs...', () => { // todo: check that the users blogs variable change
 
     beforeEach(setToken)
 

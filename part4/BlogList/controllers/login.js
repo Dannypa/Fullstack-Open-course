@@ -1,5 +1,4 @@
 require('dotenv').config()
-const config = require('../utils/config')
 const loginRouter = require('express').Router()
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
@@ -13,7 +12,7 @@ loginRouter.post('/', async (req, resp) => {
     const passwordCheck = savedUser ?
         await bcrypt.compare(password, savedUser.passwordHash) : false
     if (!passwordCheck) {
-        resp.status(401).json({ error: 'wrong username or password' })
+        return resp.status(401).json({ error: 'wrong username or password' })
     }
 
     const token = jwt.sign({
