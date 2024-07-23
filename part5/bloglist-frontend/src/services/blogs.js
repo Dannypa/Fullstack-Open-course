@@ -6,4 +6,16 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-export default { getAll }
+const formToken = (token) => `Bearer ${token}`
+
+const addNew = (contents, token) => {
+  return axios
+      .post(baseUrl, contents, {
+        headers: {
+          Authorization: formToken(token)
+        }
+      })
+      .then(resp => resp.data)
+}
+
+export default { getAll, addNew }

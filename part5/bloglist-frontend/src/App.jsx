@@ -7,10 +7,14 @@ const App = () => {
     const [blogs, setBlogs] = useState([])
     const [user, setUser] = useState(null)
 
-    useEffect(() => {
+    const reloadBlogs = () => {
         blogService.getAll().then(blogs =>
-            setBlogs( blogs )
+            setBlogs(blogs)
         )
+    }
+
+    useEffect(() => {
+        reloadBlogs()
     }, [])
 
     useEffect(() => {
@@ -22,7 +26,7 @@ const App = () => {
         <div>
             {user === null ?
                 <LogInForm setUser={setUser}/> :
-                <BlogList name={user.name} blogs={blogs} setUser={setUser} />}
+                <BlogList name={user.name} {...{ blogs, reloadBlogs, user, setUser }} />}
         </div>
     )
 }
