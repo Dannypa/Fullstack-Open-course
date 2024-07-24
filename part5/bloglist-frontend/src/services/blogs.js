@@ -18,10 +18,20 @@ const addNew = (contents, token) => {
       .then(resp => resp.data)
 }
 
-const change = (id, newBlog) => {
+const changeBlog = (id, newBlog) => {
     return axios
         .put(`${baseUrl}/${id}`, newBlog)
         .then(resp => resp.data)
 }
 
-export default { getAll, addNew, change}
+const deleteBlog = (id, token) => {
+    return axios
+        .delete(`${baseUrl}/${id}`, {
+            headers: {
+                Authorization: formToken(token)
+            }
+        })
+        .then(resp => resp.data)
+}
+
+export default { getAll, addNew, changeBlog, deleteBlog}
