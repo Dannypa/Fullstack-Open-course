@@ -2,6 +2,7 @@ import Blog from './Blog.jsx'
 import blogService from '../services/blogs.js'
 import { useRef } from 'react'
 import AddBlogComponent from './AddBlogComponent.jsx'
+import Togglable from './Togglable.jsx'
 
 const BlogList = ({ name, blogs, reloadBlogs, user, setUser, handleNotificationChange }) => {
     const handleLogOut = () => {
@@ -17,7 +18,9 @@ const BlogList = ({ name, blogs, reloadBlogs, user, setUser, handleNotificationC
                 <i>You are logged in as {`${name}. `}</i>
                 <button onClick={handleLogOut}>log out</button>
             </p> <br />
-            <AddBlogComponent token={user.token} {...{ reloadBlogs, handleNotificationChange }}/>
+            <Togglable label={'create a blog'}>
+                <AddBlogComponent token={user.token} {...{ reloadBlogs, handleNotificationChange }}/>
+            </Togglable>
             {blogs.map(blog =>
                 <Blog key={blog.id} blog={blog} />
             )}

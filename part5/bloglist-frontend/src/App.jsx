@@ -3,6 +3,8 @@ import blogService from './services/blogs'
 import LogInForm from './components/LogInForm.jsx'
 import BlogList from './components/BlogList.jsx'
 import Notification from './components/Notification.jsx'
+import Togglable from './components/Togglable.jsx'
+
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
@@ -35,7 +37,9 @@ const App = () => {
         <div>
             <Notification message={notificationMessage}/>
             {user === null ?
-                <LogInForm {...{ setUser, handleNotificationChange }}/> :
+                <Togglable label={'log in'}>
+                    <LogInForm {...{ setUser, handleNotificationChange }}/>
+                </Togglable> :
                 <BlogList name={user.name} {...{ blogs, reloadBlogs, user, setUser, handleNotificationChange }} />}
         </div>
     )
