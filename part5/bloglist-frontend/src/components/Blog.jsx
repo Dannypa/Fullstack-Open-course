@@ -1,4 +1,32 @@
 import { useState } from 'react'
+import blogService from '../services/blogs.js'
+
+const BlogDetails = ({ blog }) => {
+    const [likes, setLikes] = useState(blog.likes)
+
+    const handleLikes = () => { // todo: one like per person
+        blogService.change(blog.id, {
+            title: blog.title,
+            author: blog.author,
+            url: blog.url,
+            likes: blog.likes + 1,
+            user: blog.user.id
+        }).then(
+            result => {
+                console.log(result)
+                setLikes(likes + 1)
+            } // testing
+        ).catch(err => console.log(err))
+    }
+
+    return (
+        <div>
+            <p><a href={blog.url}>{blog.url}</a>, {likes} likes <button onClick={handleLikes}>like</button></p>
+            <i>added by {blog.user.username} </i> <br/>
+        </div>
+    )
+}
+
 
 const Blog = ({ blog }) => {
 
@@ -14,12 +42,7 @@ const Blog = ({ blog }) => {
 
     const [showDetails, setShowDetails] = useState(false)
     const buttonLabel = () => showDetails ? 'hide' : 'view'
-    const getDetails = () => showDetails ?
-        <div>
-            <p><a href={blog.url}>{blog.url}</a>, {blog.likes} likes</p>
-            added by {blog.user.username} <br/>
-        </div>
-        : null
+    const getDetails = () => showDetails ? <BlogDetails blog={blog}/> : null
 
     const toggleDetails = () => setShowDetails(!showDetails)
 

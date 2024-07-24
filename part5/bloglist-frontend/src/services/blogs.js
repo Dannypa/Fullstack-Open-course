@@ -18,4 +18,10 @@ const addNew = (contents, token) => {
       .then(resp => resp.data)
 }
 
-export default { getAll, addNew }
+const change = (id, newBlog) => {
+    return axios
+        .put(`${baseUrl}/${id}`, newBlog)
+        .then(resp => resp.data)
+}
+
+export default { getAll, addNew, change}
