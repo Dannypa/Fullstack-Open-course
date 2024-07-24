@@ -1,10 +1,10 @@
 ### Adding a new blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbm55cGEiLCJpZCI6IjY2OWNlYjY4MzdiMDI2ODUyZjEwMzEwYyIsImlhdCI6MTcyMTcyOTU2MiwiZXhwIjoxNzIxODE1OTYyfQ.Uu_UDdMaRAXuqx4JuLakDb7zv0ZXL4g1z4NgnwmI6BY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbm55cGEiLCJpZCI6IjY2OWNlYjY4MzdiMDI2ODUyZjEwMzEwYyIsImlhdCI6MTcyMTgyMjc2NCwiZXhwIjoxNzIxOTA5MTY0fQ.NEjtF3PzDZOLqcV4OhIrBO4Ho8LfK64UNnLiGQ37nFU
 
 {
-  "title": "another test blog",
+  "title": "AAAAAAAAAAAAAAAAA DELETE ME PLEASE",
   "author": "my good friend jizah",
   "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   "likes": 17000000

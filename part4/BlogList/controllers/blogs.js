@@ -36,6 +36,10 @@ blogRouter.delete('/:id', middleware.userExtractor, async (request, response) =>
     }
 
     await Blog.findByIdAndDelete(rid)
+
+    const oldBlogs = (await User.findById(userId)).blogs
+    await User.findByIdAndUpdate(userId, { blogs: oldBlogs.filter(b => b.toString() !== rid) })
+
     response.status(204).end()
 })
 
