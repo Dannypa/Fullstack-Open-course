@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import blogService from '../services/blogs.js'
 
-const AddBlogComponent = ({ token, reloadBlogs, handleNotificationChange }) => {
+const AddBlogComponent = ({ token, onAdd, onFail }) => {
     const title = useRef('')
     const author = useRef('')
     const url = useRef('')
@@ -16,12 +16,10 @@ const AddBlogComponent = ({ token, reloadBlogs, handleNotificationChange }) => {
                 url: url.current
             }, token)
             .then(_ => {
-                reloadBlogs()
-                handleNotificationChange('Successfully added a blog!')
+                onAdd()
             })
             .catch(err => {
-                console.log(err)
-                handleNotificationChange('Something went wrong.')
+                onFail(err)
             }).finally(() => {
                 title.current = ''
                 author.current = ''

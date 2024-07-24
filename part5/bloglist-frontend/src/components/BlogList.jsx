@@ -5,10 +5,23 @@ import AddBlogComponent from './AddBlogComponent.jsx'
 import Togglable from './Togglable.jsx'
 
 const BlogList = ({ name, blogs, reloadBlogs, user, setUser, handleNotificationChange }) => {
+    const addBlogRef = useRef()
+
     const handleLogOut = () => {
         delete window.localStorage.user
         setUser(null)
         handleNotificationChange('Successfully logged out.')
+    }
+
+    const onAdd = () => {
+        reloadBlogs()
+        addBlogRef.current.toggleVisibility()
+        handleNotificationChange('Successfully added a blog!')
+    }
+
+    const onFail = (err) => {
+        console.log(err)
+        handleNotificationChange('Something went wrong.')
     }
 
     return (
@@ -18,8 +31,8 @@ const BlogList = ({ name, blogs, reloadBlogs, user, setUser, handleNotificationC
                 <i>You are logged in as {`${name}. `}</i>
                 <button onClick={handleLogOut}>log out</button>
             </p> <br />
-            <Togglable label={'create a blog'}>
-                <AddBlogComponent token={user.token} {...{ reloadBlogs, handleNotificationChange }}/>
+            <Togglable label={'create a blog'} ref={addBlogRef}>
+                <AddBlogComponent token={user.token} {...{ onAdd, onFail }}/>
             </Togglable>
             {blogs.map(blog =>
                 <Blog key={blog.id} blog={blog} />
