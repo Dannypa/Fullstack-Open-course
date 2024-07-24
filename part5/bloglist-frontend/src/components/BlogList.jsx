@@ -2,8 +2,16 @@ import Blog from './Blog.jsx'
 import { useRef } from 'react'
 import AddBlog from './AddBlog.jsx'
 import Togglable from './Togglable.jsx'
+import PropTypes from 'prop-types'
 
-const BlogList = ({ name, blogs, reloadBlogs, user, setUser, handleNotificationChange }) => {
+const BlogList = ({
+    name,
+    blogs,
+    reloadBlogs,
+    user,
+    setUser,
+    handleNotificationChange
+}) => {
     const addBlogRef = useRef()
 
     const handleLogOut = () => {
@@ -38,6 +46,15 @@ const BlogList = ({ name, blogs, reloadBlogs, user, setUser, handleNotificationC
             )}
         </div>
     )
+}
+
+BlogList.propTypes = {
+    name: PropTypes.string.isRequired,
+    blogs: PropTypes.array.isRequired,
+    reloadBlogs: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+    setUser: PropTypes.func.isRequired,
+    handleNotificationChange: PropTypes.func.isRequired
 }
 
 export default BlogList

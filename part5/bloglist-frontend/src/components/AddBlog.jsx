@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import blogService from '../services/blogs.js'
+import PropTypes from 'prop-types'
 
 const AddBlog = ({ token, onAdd, onFail }) => {
     const title = useRef('')
@@ -39,6 +40,12 @@ const AddBlog = ({ token, onAdd, onFail }) => {
             </form>
         </div>
     )
+}
+
+AddBlog.propTypes = {
+    token: PropTypes.string.isRequired,
+    onAdd: PropTypes.func.isRequired,
+    onFail: PropTypes.func.isRequired,
 }
 
 export default AddBlog

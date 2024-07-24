@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import BlogDetails from './BlogDetails.jsx'
+import PropTypes from 'prop-types'
 
 const Blog = (props) => {
 
@@ -28,6 +29,10 @@ const Blog = (props) => {
             {getDetails()}
         </div>
     )
+}
+
+Blog.propTypes = {
+    blog: PropTypes.object.isRequired
 }
 
 export default Blog

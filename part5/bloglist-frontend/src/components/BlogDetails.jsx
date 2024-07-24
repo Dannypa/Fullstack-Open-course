@@ -1,4 +1,5 @@
 import blogService from '../services/blogs.js'
+import PropTypes from 'prop-types'
 
 const BlogDetails = ({ blog, reloadBlogs, user }) => {
     // todo: notifications
@@ -42,6 +43,12 @@ const BlogDetails = ({ blog, reloadBlogs, user }) => {
             {deleteButton()}
         </div>
     )
+}
+
+BlogDetails.propTypes = {
+    blog: PropTypes.object.isRequired,
+    reloadBlogs: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
 }
 
 export default BlogDetails

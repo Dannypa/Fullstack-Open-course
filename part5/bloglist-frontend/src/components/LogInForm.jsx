@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import loginService from '../services/login.js'
+import PropTypes from 'prop-types'
 
 const LogInForm = ({ setUser, handleNotificationChange }) => {
     const username = useRef('')
@@ -59,6 +60,11 @@ const LogInForm = ({ setUser, handleNotificationChange }) => {
             </form>
         </div>
     )
+}
+
+LogInForm.propTypes = {
+    setUser: PropTypes.func.isRequired,
+    handleNotificationChange: PropTypes.func.isRequired
 }
 
 export default LogInForm
