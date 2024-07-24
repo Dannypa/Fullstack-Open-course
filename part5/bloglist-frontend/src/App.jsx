@@ -20,7 +20,7 @@ const App = () => {
 
     const reloadBlogs = () => {
         blogService.getAll().then(blogs =>
-            setBlogs(blogs)
+            setBlogs(blogs.toSorted((a, b) => -a.likes + b.likes))
         )
     }
 

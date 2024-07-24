@@ -35,7 +35,7 @@ const BlogList = ({ name, blogs, reloadBlogs, user, setUser, handleNotificationC
                 <AddBlog token={user.token} {...{ onAdd, onFail }}/>
             </Togglable>
             {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} />
+                <Blog key={blog.id} {...{ blog, reloadBlogs }} />
             )}
         </div>
     )
