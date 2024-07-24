@@ -1,7 +1,7 @@
 import Blog from './Blog.jsx'
 import blogService from '../services/blogs.js'
 import { useRef } from 'react'
-import AddBlogComponent from './AddBlogComponent.jsx'
+import AddBlog from './AddBlog.jsx'
 import Togglable from './Togglable.jsx'
 
 const BlogList = ({ name, blogs, reloadBlogs, user, setUser, handleNotificationChange }) => {
@@ -32,7 +32,7 @@ const BlogList = ({ name, blogs, reloadBlogs, user, setUser, handleNotificationC
                 <button onClick={handleLogOut}>log out</button>
             </p> <br />
             <Togglable label={'create a blog'} ref={addBlogRef}>
-                <AddBlogComponent token={user.token} {...{ onAdd, onFail }}/>
+                <AddBlog token={user.token} {...{ onAdd, onFail }}/>
             </Togglable>
             {blogs.map(blog =>
                 <Blog key={blog.id} blog={blog} />

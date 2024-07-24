@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import blogService from '../services/blogs.js'
 
-const AddBlogComponent = ({ token, onAdd, onFail }) => {
+const AddBlog = ({ token, onAdd, onFail }) => {
     const title = useRef('')
     const author = useRef('')
     const url = useRef('')
@@ -41,4 +41,4 @@ const AddBlogComponent = ({ token, onAdd, onFail }) => {
     )
 }
 
-export default AddBlogComponent
+export default AddBlog
