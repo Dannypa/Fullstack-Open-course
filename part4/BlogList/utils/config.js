@@ -7,6 +7,7 @@ const MONGODB_URI = process.env.NODE_ENV === 'test'
 const BLOG_URL = '/api/blogs'
 const USER_URL = '/api/users'
 const LOGIN_URL = '/api/login'
+const TESTING_URL = '/api/testing'
 const SALT_ROUNDS = 10
 
 module.exports = {
@@ -15,5 +16,6 @@ module.exports = {
     BLOG_URL,
     USER_URL,
     LOGIN_URL,
+    TESTING_URL,
     SALT_ROUNDS
 }
