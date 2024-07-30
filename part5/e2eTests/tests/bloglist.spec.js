@@ -1,4 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
+const exp = require('node:constants')
 
 
 const fillInput = async (page, testId, value) => {
@@ -29,6 +30,17 @@ const expandBlog = async (page, blogTitle) => {
         .filter({ hasText: blogTitle })
         .getByRole('button')
         .click()
+}
+
+const likeOne = async (page) => {
+    // assumes that only one like button is visible
+    // Like
+    await page.getByRole('button', { name: 'like' }).click()
+
+    // Wait for the changes to take effect
+    await page
+        .locator('p')
+        .filter({ hasText: '1 likes' }).waitFor()
 }
 
 const rootUser = {
@@ -117,20 +129,8 @@ describe('Blog app', () => {
             // Expanding the blog
             await expandBlog(page, defaultBlog.title)
 
-            // Like
-            await page.getByRole('button', { name: 'like' }).click()
-
-            // Wait for rerender
-            await page
-                .getByRole('button', { name: 'like' })
-                .locator('..')
-                .waitFor()
-
-            await expect(page
-                .locator('p')
-                .filter({ hasText: '1 likes' }))
-                .toBeVisible()
-
+            // liking
+            await likeOne(page)
         })
 
         test('a user can delete a blog they added', async ({ page }) => {
@@ -155,6 +155,39 @@ describe('Blog app', () => {
             await expandBlog(page, defaultBlog.title)
 
             await expect(page.getByRole('button', { name: 'delete blog' })).not.toBeVisible()
+        })
+
+        test('the blogs are sorted by likes number', async ({ page }) => {
+            // adding a blog
+            await createBlog(page, blogToAdd.title, blogToAdd.author, blogToAdd.url)
+
+            // expanding
+            await expandBlog(page, blogToAdd.title)
+
+            // liking the second added blog
+            await likeOne(page)
+
+            // expanding the default blog
+            await expandBlog(page, defaultBlog.title)
+
+            // getting all the elements with like info
+            const likeTexts = await page
+                .locator('p')
+                .filter({ hasText: 'likes' })
+                .all()
+            const likeNumbers = []
+            for (const likeText of likeTexts) {
+                const html = await likeText.innerHTML()
+                const likeInfo = /\d+ likes/.exec(html)[0]
+                likeNumbers.push(parseInt(/\d+/.exec(likeInfo)[0]))
+            }
+            await expect(
+                likeNumbers
+                    .toSorted((a, b) => b - a)
+                    .toString()
+                === likeNumbers.toString())
+                .toBeTruthy()
+            // ^ may be bad code cause of toStrings in general, but my arrays consist of numbers only
         })
     })
 })
