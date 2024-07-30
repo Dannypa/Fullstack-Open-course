@@ -1,0 +1,23 @@
+{
+  "name": "e2etests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:report": "playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "@playwright/test": "^1.45.3",
+    "@types/node": "^22.0.0",
+    "eslint": "^9.8.0",
+    "globals": "^15.8.0"
+  },
+  "dependencies": {
+    "@stylistic/eslint-plugin": "^2.4.0"
+  }
+}
