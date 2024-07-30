@@ -37,9 +37,9 @@ const App = () => {
         <div>
             <Notification message={notificationMessage}/>
             {user === null ?
-                <Togglable label={'log in'}>
-                    <LogInForm {...{ setUser, handleNotificationChange }}/>
-                </Togglable> :
+                // <Togglable label={'log in'}>
+                <LogInForm {...{ setUser, handleNotificationChange }}/> :
+                // </Togglable>
                 <BlogList name={user.name} {...{ blogs, reloadBlogs, user, setUser, handleNotificationChange }} />}
         </div>
     )
