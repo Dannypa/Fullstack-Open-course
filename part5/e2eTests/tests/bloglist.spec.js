@@ -23,6 +23,20 @@ const createBlog = async (page, title, author, url) => {
     await page.getByText(title).waitFor()
 }
 
+const expandBlog = async (page, blogTitle) => {
+    await page
+        .locator('p')
+        .filter({ hasText: blogTitle })
+        .getByRole('button')
+        .click()
+}
+
+const rootUser = {
+    username: 'root',
+    name: 'root root',
+    password: 'супер секрет'
+}
+
 const user = {
     'username': 'dannypa',
     'name': 'Daniil Parniukov.',
@@ -46,8 +60,24 @@ describe('Blog app', () => {
         // Clearing the db
         await request.post('/api/testing/reset')
 
-        // Adding a user to the db
+        // Adding users to the db
+        await request.post('/api/users', { data: rootUser })
         await request.post('/api/users', { data: user })
+
+        await page.pause()
+        // getting a token for the root user to add a blog
+        const resp = await request.post('/api/login', { data: rootUser })
+        const jsonResp = await resp.json()
+        const token = jsonResp.token
+
+        // adding a blog to the db as the root user
+        await request.post('/api/blogs', {
+            data: defaultBlog,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        await page.pause()
 
         // loading the page
         await page.goto('/')
@@ -84,14 +114,9 @@ describe('Blog app', () => {
 
         test('a user can like a blog', async ({ page }) => {
             await createBlog(page, defaultBlog.title, defaultBlog.author, defaultBlog.url)
-            await createBlog(page, blogToAdd.title, blogToAdd.author, blogToAdd.url) // cringe, but womp womp
 
-            // Expanded the blog
-            await page
-                .locator('p')
-                .filter({ hasText: defaultBlog.title })
-                .getByRole('button')
-                .click()
+            // Expanding the blog
+            await expandBlog(page, defaultBlog.title)
 
             // Like
             await page.getByRole('button', { name: 'like' }).click()
@@ -107,6 +132,23 @@ describe('Blog app', () => {
                 .filter({ hasText: '1 likes' }))
                 .toBeVisible()
 
+        })
+
+        test.only('a user can delete a blog they added', async ({ page }) => {
+            // configure to confirm when the window dialogue appears
+            page.on('dialog', dialog => dialog.accept())
+
+            // adding the blog to be deleted
+            await createBlog(page, blogToAdd.title, blogToAdd.author, blogToAdd.url)
+
+            // deleting the blog
+            // expanding
+            await expandBlog(page, blogToAdd.title)
+            // clicking the delete button
+            await page.getByRole('button', { name: 'delete blog' }).click()
+
+            // ensuring that there is no such blog on the page now
+            await expect(page.getByText(blogToAdd.title)).not.toBeVisible()
         })
     })
 })
