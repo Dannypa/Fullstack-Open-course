@@ -3,8 +3,6 @@ import blogService from './services/blogs'
 import LogInForm from './components/LogInForm.jsx'
 import BlogList from './components/BlogList.jsx'
 import Notification from './components/Notification.jsx'
-import Togglable from './components/Togglable.jsx'
-
 
 const App = () => {
     const [blogs, setBlogs] = useState([])

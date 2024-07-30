@@ -84,7 +84,7 @@ const BlogList = ({
     return (
         <div>
             <h2>Blogs</h2>
-            <p>
+            <p data-testid={'logged-user-name'}>
                 <i>You are logged in as {`${name}. `}</i>
                 <button onClick={handleLogOut}>log out</button>
             </p> <br />

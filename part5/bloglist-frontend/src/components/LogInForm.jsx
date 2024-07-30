@@ -39,12 +39,13 @@ const LogInForm = ({ setUser, handleNotificationChange }) => {
     }
 
     return (
-        <div>
+        <div data-testid={'login-form'}>
             <h2>log in to the application</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     username:{' '}
                     <input
+                        data-testid={'username-input'}
                         type='text'
                         onChange={({ target }) => setUsername(target.value)}
                     />
@@ -52,11 +53,12 @@ const LogInForm = ({ setUser, handleNotificationChange }) => {
                 <div>
                     password:{' '}
                     <input
+                        data-testid={'password-input'}
                         type='password'
                         onChange={passwordChange}
                     />
                 </div>
-                <button type='submit'>log in</button>
+                <button data-testid={'login-button'} type='submit'>log in</button>
             </form>
         </div>
     )
