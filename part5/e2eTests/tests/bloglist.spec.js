@@ -77,7 +77,6 @@ describe('Blog app', () => {
                 Authorization: `Bearer ${token}`
             }
         })
-        await page.pause()
 
         // loading the page
         await page.goto('/')
@@ -134,7 +133,7 @@ describe('Blog app', () => {
 
         })
 
-        test.only('a user can delete a blog they added', async ({ page }) => {
+        test('a user can delete a blog they added', async ({ page }) => {
             // configure to confirm when the window dialogue appears
             page.on('dialog', dialog => dialog.accept())
 
@@ -149,6 +148,13 @@ describe('Blog app', () => {
 
             // ensuring that there is no such blog on the page now
             await expect(page.getByText(blogToAdd.title)).not.toBeVisible()
+        })
+
+        test('a user does not see the delete button for the blog they did not create', async ({ page }) => {
+            // expand the default blog
+            await expandBlog(page, defaultBlog.title)
+
+            await expect(page.getByRole('button', { name: 'delete blog' })).not.toBeVisible()
         })
     })
 })
