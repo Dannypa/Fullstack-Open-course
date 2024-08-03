@@ -6,10 +6,10 @@ export const getAll = () => {
     return axios.get(url).then(res => res.data)
 }
 
-export const addAnecdote = (content) => {
-    axios.post(url, {content, votes:0}).then(res => res.data)
+export const addAnecdote = async (content) => {
+    await axios.post(url, {content, votes:0})
 }
 
-export const changeAnecdote = (newAnecdote) => {
-    axios.put(`${url}/${newAnecdote.id}`, newAnecdote).then(res => res.data)
+export const changeAnecdote = async (newAnecdote) => {
+    await axios.put(`${url}/${newAnecdote.id}`, newAnecdote)
 }
