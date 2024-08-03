@@ -2,6 +2,8 @@ import jsonServer from 'json-server'
 
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
+// server.watch('db.json')
+
 const middlewares = jsonServer.defaults()
 
 const validator = (request, response, next) => {
