@@ -10,6 +10,9 @@ const AnecdoteForm = () => {
         onSuccess: () => {
             console.log('got here')
             queryClient.invalidateQueries({queryKey: ['anecdotes']})
+        },
+        onError: () => {
+            showNotification(dispatch, 'error! are you sure your anecdote is longer then 5 symbols?', 5000)
         }
     })
 
