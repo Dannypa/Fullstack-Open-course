@@ -5,6 +5,7 @@ import About from './components/About.jsx'
 import CreateNew from './components/CreateNew.jsx'
 import Footer from './components/Footer.jsx'
 import SavedRoutes from './components/SavedRoutes.jsx'
+import Notification from './components/Notification.jsx'
 
 
 const App = () => {
@@ -30,6 +31,9 @@ const App = () => {
     const addNew = (anecdote) => {
         anecdote.id = Math.round(Math.random() * 10000)
         setAnecdotes(anecdotes.concat(anecdote))
+
+        setNotification(`an anecdote '${anecdote.content}' created!`)
+        setTimeout(() => setNotification(null), 5000)
     }
 
     const anecdoteById = (id) =>
@@ -50,6 +54,7 @@ const App = () => {
         <div>
             <h1>Software anecdotes</h1>
             <Menu />
+            <Notification notificationText={notification}/>
             <SavedRoutes {...{ anecdotes, addNew }}/>
             <Footer />
         </div>
