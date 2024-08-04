@@ -3,16 +3,19 @@ import blogService from './services/blogs'
 import LogInForm from './components/LogInForm.jsx'
 import BlogList from './components/BlogList.jsx'
 import Notification from './components/Notification.jsx'
+import { useDispatch, useSelector } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer.js'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
     const [user, setUser] = useState(null)
-    const [notificationMessage, setNotificationMessage] = useState(null)
+    const dispatch = useDispatch()
+    const notificationMessage = useSelector(state => state.notification)
 
     const handleNotificationChange = message => {
-        setNotificationMessage(message)
+        dispatch(setNotification(message))
         setTimeout(() => {
-            setNotificationMessage(null)
+            dispatch(setNotification(null))
         }, 5000)
     }
 

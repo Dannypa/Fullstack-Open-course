@@ -10,9 +10,9 @@ export default [
     pluginJs.configs.recommended,
     pluginReact.configs.flat.recommended,
     {
-        plugins: {
-            '@stylistic': stylistic
-        },
+        // plugins: {
+        //     '@stylistic': stylistic
+        // },
         rules: {
             'react/react-in-jsx-scope': 'off',
             eqeqeq: 'error',
