@@ -4,19 +4,19 @@ import PropTypes from 'prop-types'
 
 const LogInForm = ({ setUser, handleNotificationChange }) => {
     const username = useRef('')
-    const setUsername = (value) => {
+    const setUsername = value => {
         username.current = value
     }
     const password = useRef('')
-    const setPassword = (value) => password.current = value
+    const setPassword = value => (password.current = value)
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async event => {
         event.preventDefault()
 
         try {
             const result = await loginService.login({
                 username: username.current,
-                password: password.current
+                password: password.current,
             })
 
             if (!result.token) {
@@ -33,7 +33,7 @@ const LogInForm = ({ setUser, handleNotificationChange }) => {
         }
     }
 
-    const passwordChange = (event) => {
+    const passwordChange = event => {
         console.log(event.target.value)
         setPassword(event.target.value)
     }
@@ -51,14 +51,11 @@ const LogInForm = ({ setUser, handleNotificationChange }) => {
                     />
                 </div>
                 <div>
-                    password:{' '}
-                    <input
-                        data-testid={'password-input'}
-                        type='password'
-                        onChange={passwordChange}
-                    />
+                    password: <input data-testid={'password-input'} type='password' onChange={passwordChange} />
                 </div>
-                <button data-testid={'login-button'} type='submit'>log in</button>
+                <button data-testid={'login-button'} type='submit'>
+                    log in
+                </button>
             </form>
         </div>
     )
@@ -66,7 +63,7 @@ const LogInForm = ({ setUser, handleNotificationChange }) => {
 
 LogInForm.propTypes = {
     setUser: PropTypes.func.isRequired,
-    handleNotificationChange: PropTypes.func.isRequired
+    handleNotificationChange: PropTypes.func.isRequired,
 }
 
 export default LogInForm

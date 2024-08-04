@@ -9,7 +9,7 @@ const blog = {
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html',
     likes: 10,
-    __v: 0
+    __v: 0,
 }
 
 /* eslint-disable no-undef */
@@ -21,22 +21,21 @@ let container
 beforeEach(() => {
     likeMock.mockClear()
     deleteMock.mockClear()
-    container = render(<Blog
-        blog={blog}
-        user={{ username: 'a', token: 'b' }}
-        handleLikeIncrease={likeMock}
-        handleDelete={deleteMock}
-    />).container
+    container = render(
+        <Blog
+            blog={blog}
+            user={{ username: 'a', token: 'b' }}
+            handleLikeIncrease={likeMock}
+            handleDelete={deleteMock}
+        />,
+    ).container
 })
 
-
 test('renders blog title and author', () => {
-
     const element = container.querySelector('p')
     expect(element).toContainHTML(blog.title)
     expect(element).toContainHTML(blog.author)
 })
-
 
 test('does not render blog url and likes by default', () => {
     expect(container).not.toContainHTML(blog.url)
@@ -44,7 +43,7 @@ test('does not render blog url and likes by default', () => {
 })
 
 let user
-describe('after clicking \'view\'', () => {
+describe("after clicking 'view'", () => {
     beforeEach(async () => {
         user = userEvent.setup()
         const button = container.querySelector('button')

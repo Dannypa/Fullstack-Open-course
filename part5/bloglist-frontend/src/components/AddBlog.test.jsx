@@ -2,7 +2,6 @@ import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import AddBlog from './AddBlog.jsx'
 
-
 let container
 
 /* eslint-disable no-undef */
@@ -22,7 +21,7 @@ test('AddBlog calls onSubmit with the correct parameters', async () => {
     const blog = {
         title: 'First class tests',
         author: 'Robert C. Martin',
-        url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html'
+        url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html',
     }
     await fillInput('.titleInput', blog.title)
     await fillInput('.authorInput', blog.author)

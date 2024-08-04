@@ -9,7 +9,7 @@ const App = () => {
     const [user, setUser] = useState(null)
     const [notificationMessage, setNotificationMessage] = useState(null)
 
-    const handleNotificationChange = (message) => {
+    const handleNotificationChange = message => {
         setNotificationMessage(message)
         setTimeout(() => {
             setNotificationMessage(null)
@@ -17,9 +17,7 @@ const App = () => {
     }
 
     const reloadBlogs = () => {
-        blogService.getAll().then(blogs =>
-            setBlogs(blogs.toSorted((a, b) => -a.likes + b.likes))
-        )
+        blogService.getAll().then(blogs => setBlogs(blogs.toSorted((a, b) => -a.likes + b.likes)))
     }
 
     useEffect(() => {
@@ -33,12 +31,14 @@ const App = () => {
 
     return (
         <div>
-            <Notification message={notificationMessage}/>
-            {user === null ?
+            <Notification message={notificationMessage} />
+            {user === null ? (
                 // <Togglable label={'log in'}>
-                <LogInForm {...{ setUser, handleNotificationChange }}/> :
+                <LogInForm {...{ setUser, handleNotificationChange }} />
+            ) : (
                 // </Togglable>
-                <BlogList name={user.name} {...{ blogs, reloadBlogs, user, setUser, handleNotificationChange }} />}
+                <BlogList name={user.name} {...{ blogs, reloadBlogs, user, setUser, handleNotificationChange }} />
+            )}
         </div>
     )
 }
