@@ -2,7 +2,7 @@ import globals from 'globals'
 import pluginJs from '@eslint/js'
 import pluginReact from 'eslint-plugin-react'
 import stylistic from '@stylistic/eslint-plugin'
-
+import eslintConfigPrettier from 'eslint-config-prettier'
 
 export default [
     { files: ['**/*.{js,mjs,cjs,jsx}'] },
@@ -59,5 +59,6 @@ export default [
             ecmaVersion: 2022,
             sourceType: 'module',
         }
-    }
+    },
+    eslintConfigPrettier
 ]
