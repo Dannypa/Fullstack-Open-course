@@ -1,8 +1,5 @@
 import { useState } from 'react'
 import Menu from './Menu.jsx'
-import AnecdoteList from './components/AnecdoteList.jsx'
-import About from './components/About.jsx'
-import CreateNew from './components/CreateNew.jsx'
 import Footer from './components/Footer.jsx'
 import SavedRoutes from './components/SavedRoutes.jsx'
 import Notification from './components/Notification.jsx'
