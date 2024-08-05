@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
 
 // todo: remove unnecessary name prop
-const BlogList = ({ name, blogs, user, setUser }) => {
+const BlogList = ({ blogs, user, setUser }) => {
     const addBlogRef = useRef()
     const dispatch = useDispatch()
 
@@ -21,7 +21,7 @@ const BlogList = ({ name, blogs, user, setUser }) => {
         <div>
             <h2>Blogs</h2>
             <p data-testid={'logged-user-name'}>
-                <i>You are logged in as {`${name}. `}</i>
+                <i>You are logged in as {`${user.name}. `}</i>
                 <button onClick={handleLogOut}>log out</button>
             </p>{' '}
             <br />
@@ -36,7 +36,6 @@ const BlogList = ({ name, blogs, user, setUser }) => {
 }
 
 BlogList.propTypes = {
-    name: PropTypes.string.isRequired,
     blogs: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired,
     setUser: PropTypes.func.isRequired,

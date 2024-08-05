@@ -23,11 +23,7 @@ const App = () => {
     return (
         <div>
             <Notification />
-            {user === null ? (
-                <LogInForm {...{ setUser }} />
-            ) : (
-                <BlogList name={user.name} {...{ blogs, user, setUser }} />
-            )}
+            {user === null ? <LogInForm {...{ setUser }} /> : <BlogList {...{ blogs, user, setUser }} />}
         </div>
     )
 }
