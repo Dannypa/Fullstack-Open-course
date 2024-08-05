@@ -18,7 +18,7 @@ const addNew = (contents, token) => {
         .then(resp => resp.data)
 }
 
-const changeBlog = (id, newBlog) => {
+const updateBlog = (id, newBlog) => {
     return axios.put(`${baseUrl}/${id}`, newBlog).then(resp => resp.data)
 }
 
@@ -32,4 +32,4 @@ const deleteBlog = (id, token) => {
         .then(resp => resp.data)
 }
 
-export default { getAll, addNew, changeBlog, deleteBlog }
+export default { getAll, addNew, updateBlog, deleteBlog }

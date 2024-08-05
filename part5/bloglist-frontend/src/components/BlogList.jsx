@@ -3,24 +3,21 @@ import { useRef } from 'react'
 import AddBlog from './AddBlog.jsx'
 import Togglable from './Togglable.jsx'
 import PropTypes from 'prop-types'
-import blogService from '../services/blogs.js'
 import { useDispatch } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
-import { addBlog } from '../reducers/blogsReducer.js'
+import { addBlog, deleteBlog, likeBlog } from '../reducers/blogsReducer.js'
 
-const BlogList = ({ name, blogs, reloadBlogs, user, setUser }) => {
+const BlogList = ({ name, blogs, user, setUser }) => {
     const addBlogRef = useRef()
     const dispatch = useDispatch()
 
     const handleLogOut = () => {
         delete window.localStorage.user
         setUser(null)
-
         dispatch(notify('Successfully logged out.'))
     }
 
     const onAdd = () => {
-        // reloadBlogs()
         addBlogRef.current.toggleVisibility()
         dispatch(notify('Successfully added a blog!'))
     }
@@ -32,36 +29,16 @@ const BlogList = ({ name, blogs, reloadBlogs, user, setUser }) => {
 
     const handleLikeIncrease = blog => {
         // todo: one like per person
-        blogService
-            .changeBlog(blog.id, {
-                title: blog.title,
-                author: blog.author,
-                url: blog.url,
-                likes: blog.likes + 1,
-                user: blog.user.id,
-            })
-            .then(result => {
-                console.log(result)
-                reloadBlogs() // slow. i don't like it. but probably the scenario is not realistic
-            })
-            .catch(err => console.log(err))
+        dispatch(likeBlog(blog))
     }
 
     const handleDelete = blog => {
         if (window.confirm(`Are you sure you want to delete "${blog.title}"?`)) {
-            blogService
-                .deleteBlog(blog.id, user.token)
-                .then(result => {
-                    console.log(result)
-                    reloadBlogs()
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+            dispatch(deleteBlog(blog.id, user.token))
         }
     }
 
-    const handleCreate = (event, title, author, url, token) => {
+    const handleCreate = (event, title, author, url) => {
         event.preventDefault()
         dispatch(
             addBlog(
@@ -70,7 +47,7 @@ const BlogList = ({ name, blogs, reloadBlogs, user, setUser }) => {
                     author: author.current,
                     url: url.current,
                 },
-                token,
+                user.token,
                 onAdd,
                 onFail,
             ),
