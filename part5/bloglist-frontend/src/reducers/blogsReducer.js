@@ -44,7 +44,7 @@ export const addBlog = (blog, token, onSuccess = () => {}, onFail = () => {}) =>
         blogService
             .addNew(blog, token)
             .then(added => dispatch(addBlogAction(added)))
-            .then(_ => onSuccess())
+            .then(result => onSuccess(result))
             .catch(err => onFail(err))
     }
 }
@@ -55,7 +55,7 @@ export const likeBlog = (blog, onSuccess = () => {}, onFail = () => {}) => {
     return dispatch => {
         blogService
             .updateBlog(blog.id, translateToUserIdForm(addLike(blog)))
-            .then(_ => onSuccess())
+            .then(result => onSuccess(result))
             .catch(err => onFail(err))
         dispatch(likeBlogAction(blog.id))
         dispatch(sortBlogs())
@@ -66,7 +66,7 @@ export const deleteBlog = (id, token, onSuccess = () => {}, onFail = () => {}) =
     return dispatch => {
         blogService
             .deleteBlog(id, token)
-            .then(_ => onSuccess)
+            .then(result => onSuccess(result))
             .catch(err => onFail(err))
         dispatch(deleteBlogAction(id)) // the blogs remain sorted
     }
