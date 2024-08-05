@@ -17,7 +17,8 @@ blogRouter.post('/', middleware.userExtractor, async (request, response) => {
     const blog = new Blog(request.body)
     blog.user = userId
     const saveResult = await blog.save()
-    response.status(201).json(saveResult)
+    const populated = await saveResult.populate('user')
+    response.status(201).json(populated)
 
     const oldBlogs = (await User.findById(userId)).blogs // todo: ?? sth wrong with changing with errors?
     await User.findByIdAndUpdate(userId, { blogs: oldBlogs.concat(blog._id) })
@@ -44,6 +45,7 @@ blogRouter.delete('/:id', middleware.userExtractor, async (request, response) =>
 })
 
 blogRouter.put('/:id', async (request, response) => { // todo: auth
+    // todo: lmao the code currently accepts any changes from literally anyone
     const rid = request.params.id
     const data = request.body
     // Let's forbid changing id, as I see no reason to do it and it may break something
@@ -51,7 +53,8 @@ blogRouter.put('/:id', async (request, response) => { // todo: auth
         return response.status(400).json({ error: 'id should not change' })
     }
     const updated = await Blog.findByIdAndUpdate(rid, data, { new: true, runValidators: true })
-    response.json(updated)
+    const populated = await updated.populate('user')
+    response.json(populated)
 })
 
 module.exports = blogRouter
