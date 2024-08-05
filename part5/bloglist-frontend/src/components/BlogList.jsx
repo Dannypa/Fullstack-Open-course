@@ -3,13 +3,13 @@ import { useRef } from 'react'
 import AddBlog from './AddBlog.jsx'
 import Togglable from './Togglable.jsx'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
 
-// todo: remove unnecessary name prop
-const BlogList = ({ blogs, user, setUser }) => {
+const BlogList = ({ user, setUser }) => {
     const addBlogRef = useRef()
     const dispatch = useDispatch()
+    const blogs = useSelector(state => state.blogs)
 
     const handleLogOut = () => {
         delete window.localStorage.user
@@ -36,7 +36,6 @@ const BlogList = ({ blogs, user, setUser }) => {
 }
 
 BlogList.propTypes = {
-    blogs: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired,
     setUser: PropTypes.func.isRequired,
 }

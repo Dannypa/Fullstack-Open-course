@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react'
 import LogInForm from './components/LogInForm.jsx'
 import BlogList from './components/BlogList.jsx'
 import Notification from './components/Notification.jsx'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { reloadBlogs } from './reducers/blogsReducer.js'
 
 const App = () => {
-    const blogs = useSelector(state => state.blogs)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -23,7 +22,7 @@ const App = () => {
     return (
         <div>
             <Notification />
-            {user === null ? <LogInForm {...{ setUser }} /> : <BlogList {...{ blogs, user, setUser }} />}
+            {user === null ? <LogInForm {...{ setUser }} /> : <BlogList {...{ user, setUser }} />}
         </div>
     )
 }
