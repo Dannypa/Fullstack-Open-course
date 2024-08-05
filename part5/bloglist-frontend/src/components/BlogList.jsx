@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import blogService from '../services/blogs.js'
 import { useDispatch } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
+import { addBlog } from '../reducers/blogsReducer.js'
 
 const BlogList = ({ name, blogs, reloadBlogs, user, setUser }) => {
     const addBlogRef = useRef()
@@ -19,7 +20,7 @@ const BlogList = ({ name, blogs, reloadBlogs, user, setUser }) => {
     }
 
     const onAdd = () => {
-        reloadBlogs()
+        // reloadBlogs()
         addBlogRef.current.toggleVisibility()
         dispatch(notify('Successfully added a blog!'))
     }
@@ -62,27 +63,22 @@ const BlogList = ({ name, blogs, reloadBlogs, user, setUser }) => {
 
     const handleCreate = (event, title, author, url, token) => {
         event.preventDefault()
-        blogService
-            .addNew(
+        dispatch(
+            addBlog(
                 {
                     title: title.current,
                     author: author.current,
                     url: url.current,
                 },
                 token,
-            )
-            .then(_ => {
-                onAdd()
-            })
-            .catch(err => {
-                onFail(err)
-            })
-            .finally(() => {
-                title.current = ''
-                author.current = ''
-                url.current = ''
-                event.target.reset()
-            })
+                onAdd,
+                onFail,
+            ),
+        )
+        title.current = ''
+        author.current = ''
+        url.current = ''
+        event.target.reset()
     }
 
     return (
@@ -106,7 +102,6 @@ const BlogList = ({ name, blogs, reloadBlogs, user, setUser }) => {
 BlogList.propTypes = {
     name: PropTypes.string.isRequired,
     blogs: PropTypes.array.isRequired,
-    reloadBlogs: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     setUser: PropTypes.func.isRequired,
 }

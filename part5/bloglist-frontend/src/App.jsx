@@ -1,20 +1,19 @@
 import { useState, useEffect } from 'react'
-import blogService from './services/blogs'
 import LogInForm from './components/LogInForm.jsx'
 import BlogList from './components/BlogList.jsx'
 import Notification from './components/Notification.jsx'
+import { useDispatch, useSelector } from 'react-redux'
+import { reloadBlogs } from './reducers/blogsReducer.js'
 
 const App = () => {
-    const [blogs, setBlogs] = useState([])
-    const [user, setUser] = useState(null)
-
-    const reloadBlogs = () => {
-        blogService.getAll().then(blogs => setBlogs(blogs.toSorted((a, b) => -a.likes + b.likes)))
-    }
+    const blogs = useSelector(state => state.blogs)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        reloadBlogs()
+        dispatch(reloadBlogs())
     }, [])
+
+    const [user, setUser] = useState(null)
 
     useEffect(() => {
         console.log(JSON.parse(window.localStorage.getItem('user')))
@@ -29,7 +28,7 @@ const App = () => {
                 <LogInForm {...{ setUser }} />
             ) : (
                 // </Togglable>
-                <BlogList name={user.name} {...{ blogs, reloadBlogs, user, setUser }} />
+                <BlogList name={user.name} {...{ blogs, user, setUser }} />
             )}
         </div>
     )
