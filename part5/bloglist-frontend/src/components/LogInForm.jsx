@@ -1,10 +1,10 @@
 import { useRef } from 'react'
 import loginService from '../services/login.js'
-import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
+import { setUser } from '../reducers/userReducer.js'
 
-const LogInForm = ({ setUser }) => {
+const LogInForm = () => {
     const username = useRef('')
     const setUsername = value => {
         username.current = value
@@ -17,6 +17,7 @@ const LogInForm = ({ setUser }) => {
         event.preventDefault()
 
         try {
+            // todo: move login to reducer file
             const result = await loginService.login({
                 username: username.current,
                 password: password.current,
@@ -28,7 +29,7 @@ const LogInForm = ({ setUser }) => {
             }
 
             window.localStorage.setItem('user', JSON.stringify(result))
-            setUser(result)
+            dispatch(setUser(result))
             dispatch(notify('Successfully logged in!'))
         } catch (e) {
             console.log(e)
@@ -62,10 +63,6 @@ const LogInForm = ({ setUser }) => {
             </form>
         </div>
     )
-}
-
-LogInForm.propTypes = {
-    setUser: PropTypes.func.isRequired,
 }
 
 export default LogInForm

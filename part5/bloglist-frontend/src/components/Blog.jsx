@@ -2,7 +2,7 @@ import { useState } from 'react'
 import BlogDetails from './BlogDetails.jsx'
 import PropTypes from 'prop-types'
 
-const Blog = props => {
+const Blog = ({ blog }) => {
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
@@ -15,14 +15,14 @@ const Blog = props => {
 
     const [showDetails, setShowDetails] = useState(false)
     const buttonLabel = () => (showDetails ? 'hide' : 'view')
-    const getDetails = () => (showDetails ? <BlogDetails {...props} /> : null)
+    const getDetails = () => (showDetails ? <BlogDetails blog={blog} /> : null)
 
     const toggleDetails = () => setShowDetails(!showDetails)
 
     return (
         <div style={blogStyle}>
             <p>
-                <b>{props.blog.title}</b> <br /> <i>by {props.blog.author + ' '}</i>
+                <b>{blog.title}</b> <br /> <i>by {blog.author + ' '}</i>
                 <button onClick={toggleDetails}>{buttonLabel()}</button>
             </p>
             {getDetails()}
@@ -32,7 +32,6 @@ const Blog = props => {
 
 Blog.propTypes = {
     blog: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
 }
 
 export default Blog

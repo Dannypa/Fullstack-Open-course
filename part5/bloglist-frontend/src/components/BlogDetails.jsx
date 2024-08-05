@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 import { deleteBlog, likeBlog } from '../reducers/blogsReducer.js'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-const BlogDetails = ({ blog, user }) => {
+const BlogDetails = ({ blog }) => {
     // todo: notifications
+    const user = useSelector(state => state.user)
     const dispatch = useDispatch()
 
     const handleLikeIncrease = blog => {
