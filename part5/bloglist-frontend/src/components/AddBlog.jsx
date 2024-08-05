@@ -1,15 +1,50 @@
 import { useRef } from 'react'
 import PropTypes from 'prop-types'
+import { notify } from '../reducers/notificationReducer.js'
+import { addBlog } from '../reducers/blogsReducer.js'
+import { useDispatch } from 'react-redux'
 
-const AddBlog = ({ token, handleCreate }) => {
+const AddBlog = ({ token, selfToggleRef }) => {
     const title = useRef('')
     const author = useRef('')
     const url = useRef('')
 
+    const dispatch = useDispatch()
+
+    const onAdd = () => {
+        selfToggleRef.current.toggleVisibility()
+        dispatch(notify('Successfully added a blog!'))
+    }
+
+    const onFail = err => {
+        console.log(err)
+        dispatch(notify('Something went wrong.'))
+    }
+
+    const handleCreate = (event, title, author, url) => {
+        event.preventDefault()
+        dispatch(
+            addBlog(
+                {
+                    title: title.current,
+                    author: author.current,
+                    url: url.current,
+                },
+                token,
+                onAdd,
+                onFail,
+            ),
+        )
+        title.current = ''
+        author.current = ''
+        url.current = ''
+        event.target.reset()
+    }
+
     return (
         <div>
             <h3>Create new blog</h3>
-            <form onSubmit={event => handleCreate(event, title, author, url, token)}>
+            <form onSubmit={event => handleCreate(event, title, author, url)}>
                 <p>
                     title:{' '}
                     <input
@@ -44,7 +79,7 @@ const AddBlog = ({ token, handleCreate }) => {
 
 AddBlog.propTypes = {
     token: PropTypes.string.isRequired,
-    handleCreate: PropTypes.func.isRequired,
+    selfToggleRef: PropTypes.object.isRequired,
 }
 
 export default AddBlog

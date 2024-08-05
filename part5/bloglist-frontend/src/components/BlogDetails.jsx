@@ -1,7 +1,21 @@
 import PropTypes from 'prop-types'
+import { deleteBlog, likeBlog } from '../reducers/blogsReducer.js'
+import { useDispatch } from 'react-redux'
 
-const BlogDetails = ({ blog, user, handleLikeIncrease, handleDelete }) => {
+const BlogDetails = ({ blog, user }) => {
     // todo: notifications
+    const dispatch = useDispatch()
+
+    const handleLikeIncrease = blog => {
+        // todo: one like per person
+        dispatch(likeBlog(blog))
+    }
+
+    const handleDelete = blog => {
+        if (window.confirm(`Are you sure you want to delete "${blog.title}"?`)) {
+            dispatch(deleteBlog(blog.id, user.token))
+        }
+    }
 
     const deleteButton = () =>
         user.username === blog.user.username ? <button onClick={() => handleDelete(blog)}>delete blog</button> : null
@@ -23,8 +37,6 @@ const BlogDetails = ({ blog, user, handleLikeIncrease, handleDelete }) => {
 BlogDetails.propTypes = {
     blog: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    handleLikeIncrease: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
 }
 
 export default BlogDetails
