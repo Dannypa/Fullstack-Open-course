@@ -3,21 +3,10 @@ import blogService from './services/blogs'
 import LogInForm from './components/LogInForm.jsx'
 import BlogList from './components/BlogList.jsx'
 import Notification from './components/Notification.jsx'
-import { useDispatch, useSelector } from 'react-redux'
-import { setNotification } from './reducers/notificationReducer.js'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
     const [user, setUser] = useState(null)
-    const dispatch = useDispatch()
-    const notificationMessage = useSelector(state => state.notification)
-
-    const handleNotificationChange = message => {
-        dispatch(setNotification(message))
-        setTimeout(() => {
-            dispatch(setNotification(null))
-        }, 5000)
-    }
 
     const reloadBlogs = () => {
         blogService.getAll().then(blogs => setBlogs(blogs.toSorted((a, b) => -a.likes + b.likes)))
@@ -34,13 +23,13 @@ const App = () => {
 
     return (
         <div>
-            <Notification message={notificationMessage} />
+            <Notification />
             {user === null ? (
                 // <Togglable label={'log in'}>
-                <LogInForm {...{ setUser, handleNotificationChange }} />
+                <LogInForm {...{ setUser }} />
             ) : (
                 // </Togglable>
-                <BlogList name={user.name} {...{ blogs, reloadBlogs, user, setUser, handleNotificationChange }} />
+                <BlogList name={user.name} {...{ blogs, reloadBlogs, user, setUser }} />
             )}
         </div>
     )

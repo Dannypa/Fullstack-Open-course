@@ -4,25 +4,29 @@ import AddBlog from './AddBlog.jsx'
 import Togglable from './Togglable.jsx'
 import PropTypes from 'prop-types'
 import blogService from '../services/blogs.js'
+import { useDispatch } from 'react-redux'
+import { notify } from '../reducers/notificationReducer.js'
 
-const BlogList = ({ name, blogs, reloadBlogs, user, setUser, handleNotificationChange }) => {
+const BlogList = ({ name, blogs, reloadBlogs, user, setUser }) => {
     const addBlogRef = useRef()
+    const dispatch = useDispatch()
 
     const handleLogOut = () => {
         delete window.localStorage.user
         setUser(null)
-        handleNotificationChange('Successfully logged out.')
+
+        dispatch(notify('Successfully logged out.'))
     }
 
     const onAdd = () => {
         reloadBlogs()
         addBlogRef.current.toggleVisibility()
-        handleNotificationChange('Successfully added a blog!')
+        dispatch(notify('Successfully added a blog!'))
     }
 
     const onFail = err => {
         console.log(err)
-        handleNotificationChange('Something went wrong.')
+        dispatch(notify('Something went wrong.'))
     }
 
     const handleLikeIncrease = blog => {
@@ -105,7 +109,6 @@ BlogList.propTypes = {
     reloadBlogs: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     setUser: PropTypes.func.isRequired,
-    handleNotificationChange: PropTypes.func.isRequired,
 }
 
 export default BlogList

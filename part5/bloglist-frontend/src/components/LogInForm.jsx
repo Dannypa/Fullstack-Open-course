@@ -1,14 +1,17 @@
 import { useRef } from 'react'
 import loginService from '../services/login.js'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { notify } from '../reducers/notificationReducer.js'
 
-const LogInForm = ({ setUser, handleNotificationChange }) => {
+const LogInForm = ({ setUser }) => {
     const username = useRef('')
     const setUsername = value => {
         username.current = value
     }
     const password = useRef('')
     const setPassword = value => (password.current = value)
+    const dispatch = useDispatch()
 
     const handleSubmit = async event => {
         event.preventDefault()
@@ -26,10 +29,10 @@ const LogInForm = ({ setUser, handleNotificationChange }) => {
 
             window.localStorage.setItem('user', JSON.stringify(result))
             setUser(result)
-            handleNotificationChange('Successfully logged in!')
+            dispatch(notify('Successfully logged in!'))
         } catch (e) {
             console.log(e)
-            handleNotificationChange('Wrong username or password!')
+            dispatch(notify('Wrong username or password!'))
         }
     }
 
@@ -63,7 +66,6 @@ const LogInForm = ({ setUser, handleNotificationChange }) => {
 
 LogInForm.propTypes = {
     setUser: PropTypes.func.isRequired,
-    handleNotificationChange: PropTypes.func.isRequired,
 }
 
 export default LogInForm
