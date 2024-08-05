@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import loginService from '../services/login.js'
 import { useDispatch } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
-import { setUser } from '../reducers/userReducer.js'
+import { login, setUser } from '../reducers/userReducer.js'
 
 const LogInForm = () => {
     const username = useRef('')
@@ -15,26 +15,20 @@ const LogInForm = () => {
 
     const handleSubmit = async event => {
         event.preventDefault()
-
-        try {
-            // todo: move login to reducer file
-            const result = await loginService.login({
-                username: username.current,
-                password: password.current,
-            })
-
-            if (!result.token) {
-                console.log('invalid credentials')
-                return
-            }
-
-            window.localStorage.setItem('user', JSON.stringify(result))
-            dispatch(setUser(result))
-            dispatch(notify('Successfully logged in!'))
-        } catch (e) {
-            console.log(e)
-            dispatch(notify('Wrong username or password!'))
-        }
+        dispatch(
+            login(
+                username.current,
+                password.current,
+                result => {
+                    window.localStorage.setItem('user', JSON.stringify(result))
+                    dispatch(notify('Successfully logged in!'))
+                },
+                err => {
+                    console.log(err)
+                    dispatch(notify('Wrong username or password!'))
+                },
+            ),
+        )
     }
 
     const passwordChange = event => {
@@ -42,6 +36,7 @@ const LogInForm = () => {
         setPassword(event.target.value)
     }
 
+    // todo: change to uncontrolled forms
     return (
         <div data-testid={'login-form'}>
             <h2>log in to the application</h2>
