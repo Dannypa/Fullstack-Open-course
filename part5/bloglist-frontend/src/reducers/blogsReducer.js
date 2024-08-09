@@ -42,7 +42,7 @@ export const reloadBlogs = () => {
 export const addBlog = (blog, token, onSuccess = () => {}, onFail = () => {}) => {
     return dispatch => {
         blogService
-            .addNew(blog, token)
+            .add(blog, token)
             .then(added => dispatch(addBlogAction(added)))
             .then(result => onSuccess(result))
             .catch(err => onFail(err))
@@ -54,7 +54,7 @@ export const likeBlog = (blog, onSuccess = () => {}, onFail = () => {}) => {
     // sad that i have to pass a blog, but i am too lazy to implement cleverer solutions
     return dispatch => {
         blogService
-            .updateBlog(blog.id, translateToUserIdForm(addLike(blog)))
+            .update(blog.id, translateToUserIdForm(addLike(blog)))
             .then(result => onSuccess(result))
             .catch(err => onFail(err))
         dispatch(likeBlogAction(blog.id))
@@ -65,7 +65,7 @@ export const likeBlog = (blog, onSuccess = () => {}, onFail = () => {}) => {
 export const deleteBlog = (id, token, onSuccess = () => {}, onFail = () => {}) => {
     return dispatch => {
         blogService
-            .deleteBlog(id, token)
+            .delete(id, token)
             .then(result => onSuccess(result))
             .catch(err => onFail(err))
         dispatch(deleteBlogAction(id)) // the blogs remain sorted

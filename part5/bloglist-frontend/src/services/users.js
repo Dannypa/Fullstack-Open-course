@@ -1,5 +1,4 @@
 import { getService } from './defaultService.js'
-
-const baseUrl = '/api/blogs'
+const baseUrl = '/api/users/'
 
 export default getService(baseUrl)

@@ -20,7 +20,6 @@ const BlogList = () => {
 
     return (
         <div>
-            <h2>Blogs</h2>
             <p data-testid={'logged-user-name'}>
                 <i>You are logged in as {`${user.name}. `}</i>
                 <button onClick={handleLogOut}>log out</button>
