@@ -24,12 +24,13 @@ const BlogDetails = ({ blog }) => {
     return (
         <div>
             <p>
-                <a href={blog.url}>{blog.url}</a>, {blog.likes} likes
+                <a href={blog.url}>{blog.url}</a> <br />
+                {blog.likes} likes{' '}
                 <button className={'likeButton'} onClick={() => handleLikeIncrease(blog)}>
                     like
                 </button>
             </p>
-            <i>added by {blog.user.username} </i> <br />
+            <i>added by {blog.user.username} </i> <br /> <br />
             {deleteButton()}
         </div>
     )

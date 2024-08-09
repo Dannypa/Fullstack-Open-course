@@ -80,7 +80,7 @@
         <line num="26" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
       </file>
-      <file name="Blog.jsx" path="/home/dannypa/FullstackCourse/part5/bloglist-frontend/src/components/Blog.jsx">
+      <file name="BlogPage.jsx" path="/home/dannypa/FullstackCourse/part5/bloglist-frontend/src/components/BlogPage.jsx">
         <metrics statements="33" coveredstatements="33" conditionals="8" coveredconditionals="8" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>

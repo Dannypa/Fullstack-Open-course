@@ -1,10 +1,30 @@
-import Blog from './Blog.jsx'
 import { useRef } from 'react'
 import AddBlog from './AddBlog.jsx'
 import Togglable from './Togglable.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
 import { setUser } from '../reducers/userReducer.js'
+import { Link } from 'react-router-dom'
+
+const BlogPreview = ({ blog }) => {
+    const blogStyle = {
+        paddingTop: 10,
+        paddingLeft: 2,
+        border: 'solid',
+        borderWidth: 1,
+        borderRadius: 10,
+        margin: 5,
+        padding: 10,
+    }
+    return (
+        <p style={blogStyle}>
+            <Link to={`/blogs/${blog.id}`}>
+                <b>{blog.title}</b>
+            </Link>{' '}
+            <br /> <i>by {blog.author + ' '}</i>
+        </p>
+    )
+}
 
 const BlogList = () => {
     const addBlogRef = useRef()
@@ -29,7 +49,7 @@ const BlogList = () => {
                 <AddBlog token={user.token} selfToggleRef={addBlogRef} />
             </Togglable>
             {blogs.map(blog => (
-                <Blog key={blog.id} blog={blog} />
+                <BlogPreview key={blog.id} blog={blog} />
             ))}
         </div>
     )

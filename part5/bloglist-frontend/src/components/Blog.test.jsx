@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import Blog from './Blog.jsx'
+import BlogPage from './BlogPage.jsx'
 import { Provider } from 'react-redux'
 import store from '../store.js'
 
@@ -25,7 +25,7 @@ beforeEach(() => {
     deleteMock.mockClear()
     container = render(
         <Provider store={store}>
-            <Blog
+            <BlogPage
                 blog={blog}
                 user={{ username: 'a', token: 'b' }}
                 handleLikeIncrease={likeMock}
