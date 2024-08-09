@@ -5,12 +5,13 @@ import Notification from './components/Notification.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { reloadBlogs } from './reducers/blogsReducer.js'
 import { setUser } from './reducers/userReducer.js'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, useMatch } from 'react-router-dom'
 import UserList from './components/UserList.jsx'
+import UserPage from './components/UserPage.jsx'
 
 const App = () => {
     const dispatch = useDispatch()
-    const user = useSelector(state => state.user)
+    const loggedUser = useSelector(state => state.user)
 
     useEffect(() => {
         dispatch(reloadBlogs())
@@ -26,8 +27,9 @@ const App = () => {
             <Notification />
 
             <Routes>
-                <Route path={'/'} element={user === null ? <LogInForm /> : <BlogList />} />
+                <Route path={'/'} element={loggedUser === null ? <LogInForm /> : <BlogList />} />
                 <Route path={'/users'} element={<UserList />} />
+                <Route path={'/users/:id'} element={<UserPage />} />
             </Routes>
         </div>
     )

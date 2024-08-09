@@ -1,6 +1,17 @@
 import userService from '../services/users.js'
 import { useEffect, useState } from 'react'
-import UserInfo from './UserInfo.jsx'
+import { Link } from 'react-router-dom'
+
+const UserFormatter = ({ user }) => {
+    return (
+        <>
+            <Link to={`/users/${user.id}`}>
+                <strong>{user.name}</strong>
+            </Link>{' '}
+            aka <i>{user.username}</i> created {user.blogs.length} blogs. <br />
+        </>
+    )
+}
 
 const UserList = () => {
     const [users, setUsers] = useState([])
@@ -14,7 +25,7 @@ const UserList = () => {
             <h2>Users</h2>
             {users.map(user => (
                 <li key={user.username}>
-                    <UserInfo user={user} />
+                    <UserFormatter user={user} />
                 </li>
             ))}
         </div>

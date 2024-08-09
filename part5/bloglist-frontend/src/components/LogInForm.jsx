@@ -1,8 +1,7 @@
 import { useRef } from 'react'
-import loginService from '../services/login.js'
 import { useDispatch } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
-import { login, setUser } from '../reducers/userReducer.js'
+import { login } from '../reducers/userReducer.js'
 
 const LogInForm = () => {
     const username = useRef('')
