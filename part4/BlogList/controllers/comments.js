@@ -8,8 +8,8 @@ commentRouter.post('/:id/comments/', async (req, resp) => {
 
     const currentComments = (await Blog.findById(blogId)).comments
     const updatedBlog = await Blog.findByIdAndUpdate(blogId, { comments: currentComments.concat({ body: req.body.comment, id: uuid.v4() }) }, { new: true })
-
-    resp.json(updatedBlog)
+    const populated = await updatedBlog.populate('user') // todo: move population to middleware?
+    resp.json(populated)
 })
 
 module.exports = commentRouter
