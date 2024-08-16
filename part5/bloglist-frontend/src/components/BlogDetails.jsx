@@ -34,7 +34,7 @@ const BlogDetails = ({ blog }) => {
             <h2>Comments</h2>
             <ul>
                 {blog.comments.map(comment => (
-                    <li key={comment}>{comment}</li> // bad. comments are not at all unique; ill try to store ids in the database
+                    <li key={comment.id}>{comment.body}</li> // bad. comments are not at all unique; ill try to store ids in the database
                 ))}
             </ul>
             {deleteButton()}
