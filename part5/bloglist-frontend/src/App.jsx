@@ -9,7 +9,7 @@ import { Routes, Route, Link, useMatch } from 'react-router-dom'
 import UserList from './components/UserList.jsx'
 import UserPage from './components/UserPage.jsx'
 import BlogPage from './components/BlogPage.jsx'
-import { Container } from '@mui/material'
+import { Container, Typography } from '@mui/material'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -33,7 +33,9 @@ const App = () => {
 
     return (
         <Container>
-            <h1>BlogList</h1>
+            <Typography variant={'h2'} gutterBottom>
+                BlogList
+            </Typography>
             <Notification />
 
             <Routes>

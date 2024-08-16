@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
 import { login } from '../reducers/userReducer.js'
-import { Button, TextField } from '@mui/material'
+import { Button, TextField, Typography } from '@mui/material'
 
 const LogInForm = () => {
     const username = useRef('')
@@ -39,7 +39,9 @@ const LogInForm = () => {
     // todo: change to uncontrolled forms
     return (
         <div data-testid={'login-form'}>
-            <h2>log in to the application</h2>
+            <Typography variant={'h4'} gutterBottom>
+                log in to the application
+            </Typography>
             <form onSubmit={handleSubmit}>
                 <div>
                     <TextField

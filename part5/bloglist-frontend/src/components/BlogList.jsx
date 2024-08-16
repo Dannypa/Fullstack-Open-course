@@ -5,7 +5,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
 import { setUser } from '../reducers/userReducer.js'
 import { Link } from 'react-router-dom'
-import { AppBar, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Toolbar } from '@mui/material'
+import {
+    AppBar,
+    Button,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    Toolbar,
+    Typography,
+} from '@mui/material'
 
 const BlogPreview = ({ blog }) => {
     return (
@@ -43,8 +54,12 @@ const BlogList = () => {
                 </Toolbar>
             </AppBar>
             <p data-testid={'logged-user-name'}>
-                <i>You are logged in as {`${user.name}. `}</i>
-                <button onClick={handleLogOut}>log out</button>
+                <Typography>
+                    <i>You are logged in as {`${user.name}.`} </i>
+                </Typography>
+                <Button color={'inherit'} variant={'contained'} onClick={handleLogOut} style={{ marginTop: 10 }}>
+                    log out
+                </Button>
             </p>{' '}
             <br />
             <Togglable label={'create a blog'} ref={addBlogRef}>
