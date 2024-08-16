@@ -31,6 +31,12 @@ const BlogDetails = ({ blog }) => {
                 </button>
             </p>
             <i>added by {blog.user.username} </i> <br /> <br />
+            <h2>Comments</h2>
+            <ul>
+                {blog.comments.map(comment => (
+                    <li key={comment}>{comment}</li> // bad. comments are not at all unique; ill try to store ids in the database
+                ))}
+            </ul>
             {deleteButton()}
         </div>
     )
