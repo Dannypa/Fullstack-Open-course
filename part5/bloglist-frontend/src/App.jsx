@@ -9,6 +9,7 @@ import { Routes, Route, Link, useMatch } from 'react-router-dom'
 import UserList from './components/UserList.jsx'
 import UserPage from './components/UserPage.jsx'
 import BlogPage from './components/BlogPage.jsx'
+import { Container } from '@mui/material'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -30,25 +31,9 @@ const App = () => {
           })
         : null
 
-    const paddingStyle = {
-        padding: 5,
-    }
-
-    const backgroundStyle = {
-        backgroundColor: 'rgb(255, 255, 128)',
-    }
-
     return (
-        <div>
+        <Container>
             <h1>BlogList</h1>
-            <div style={backgroundStyle}>
-                <Link to={'/'} style={paddingStyle}>
-                    home
-                </Link>
-                <Link to={'/users'} style={paddingStyle}>
-                    users
-                </Link>
-            </div>
             <Notification />
 
             <Routes>
@@ -57,7 +42,7 @@ const App = () => {
                 <Route path={'/users/:id'} element={<UserPage />} />
                 <Route path={'/blogs/:id'} element={<BlogPage blog={urlBlog} />} />
             </Routes>
-        </div>
+        </Container>
     )
 }
 

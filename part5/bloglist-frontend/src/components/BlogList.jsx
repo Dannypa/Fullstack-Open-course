@@ -5,19 +5,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
 import { setUser } from '../reducers/userReducer.js'
 import { Link } from 'react-router-dom'
+import { AppBar, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Toolbar } from '@mui/material'
 
 const BlogPreview = ({ blog }) => {
-    const blogStyle = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        border: 'solid',
-        borderWidth: 1,
-        borderRadius: 10,
-        margin: 5,
-        padding: 10,
-    }
+    // const blogStyle = {
+    //     paddingTop: 10,
+    //     paddingLeft: 2,
+    //     border: 'solid',
+    //     borderWidth: 1,
+    //     borderRadius: 10,
+    //     margin: 5,
+    //     padding: 10,
+    // }
     return (
-        <p style={blogStyle}>
+        <p>
             <Link to={`/blogs/${blog.id}`}>
                 <b>{blog.title}</b>
             </Link>{' '}
@@ -40,6 +41,16 @@ const BlogList = () => {
 
     return (
         <div>
+            <AppBar position={'static'}>
+                <Toolbar>
+                    <Button to={'/'} color={'inherit'} component={Link}>
+                        home
+                    </Button>
+                    <Button to={'/users'} color={'inherit'} component={Link}>
+                        users
+                    </Button>
+                </Toolbar>
+            </AppBar>
             <p data-testid={'logged-user-name'}>
                 <i>You are logged in as {`${user.name}. `}</i>
                 <button onClick={handleLogOut}>log out</button>
@@ -48,9 +59,21 @@ const BlogList = () => {
             <Togglable label={'create a blog'} ref={addBlogRef}>
                 <AddBlog token={user.token} selfToggleRef={addBlogRef} />
             </Togglable>
-            {blogs.map(blog => (
-                <BlogPreview key={blog.id} blog={blog} />
-            ))}
+            <TableContainer component={Paper} style={{ marginTop: 10 }}>
+                {' '}
+                <Table>
+                    {' '}
+                    <TableBody>
+                        {blogs.map(blog => (
+                            <TableRow key={blog.id}>
+                                <TableCell>
+                                    <BlogPreview blog={blog} />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     )
 }
