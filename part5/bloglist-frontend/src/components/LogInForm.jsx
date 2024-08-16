@@ -21,11 +21,11 @@ const LogInForm = () => {
                 password.current,
                 result => {
                     window.localStorage.setItem('user', JSON.stringify(result))
-                    dispatch(notify('Successfully logged in!'))
+                    dispatch(notify('Successfully logged in!', 'success'))
                 },
                 err => {
                     console.log(err)
-                    dispatch(notify('Wrong username or password!'))
+                    dispatch(notify('Wrong username or password!', 'error'))
                 },
             ),
         )

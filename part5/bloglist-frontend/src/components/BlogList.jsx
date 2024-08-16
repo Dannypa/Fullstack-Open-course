@@ -8,15 +8,6 @@ import { Link } from 'react-router-dom'
 import { AppBar, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Toolbar } from '@mui/material'
 
 const BlogPreview = ({ blog }) => {
-    // const blogStyle = {
-    //     paddingTop: 10,
-    //     paddingLeft: 2,
-    //     border: 'solid',
-    //     borderWidth: 1,
-    //     borderRadius: 10,
-    //     margin: 5,
-    //     padding: 10,
-    // }
     return (
         <p>
             <Link to={`/blogs/${blog.id}`}>
@@ -36,7 +27,7 @@ const BlogList = () => {
     const handleLogOut = () => {
         delete window.localStorage.user
         dispatch(setUser(null))
-        dispatch(notify('Successfully logged out.'))
+        dispatch(notify('Successfully logged out.', 'success'))
     }
 
     return (

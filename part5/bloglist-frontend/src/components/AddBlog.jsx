@@ -13,12 +13,12 @@ const AddBlog = ({ token, selfToggleRef }) => {
 
     const onAdd = () => {
         selfToggleRef.current.toggleVisibility()
-        dispatch(notify('Successfully added a blog!'))
+        dispatch(notify('Successfully added a blog!', 'success'))
     }
 
     const onFail = err => {
         console.log(err)
-        dispatch(notify('Something went wrong.'))
+        dispatch(notify('Something went wrong.', 'error'))
     }
 
     const handleCreate = (event, title, author, url) => {
