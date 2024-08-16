@@ -19,9 +19,9 @@ const blogSlice = createSlice({
         sortBlogs(state, _action) {
             return state.toSorted((a, b) => b.likes - a.likes)
         },
-        likeBlogAction(state, action) {
+        updateBlogAction(state, action) {
             // store id in the payload
-            return state.map(blog => (blog.id === action.payload ? addLike(blog) : blog))
+            return state.map(blog => (blog.id === action.payload.id ? action.payload.updated : blog))
         },
         deleteBlogAction(state, action) {
             // store id in the payload
@@ -43,7 +43,7 @@ export const addBlog = (blog, token, onSuccess = () => {}, onFail = () => {}) =>
     return dispatch => {
         blogService
             .add(blog, token)
-            .then(added => dispatch(addBlogAction(added)))
+            .then(added => dispatch(addBlogAction(added))) // todo: fix
             .then(result => onSuccess(result))
             .catch(err => onFail(err))
     }
@@ -55,9 +55,11 @@ export const likeBlog = (blog, onSuccess = () => {}, onFail = () => {}) => {
     return dispatch => {
         blogService
             .update(blog.id, translateToUserIdForm(addLike(blog)))
-            .then(result => onSuccess(result))
+            .then(result => {
+                dispatch(updateBlogAction({ id: blog.id, updated: result }))
+                return onSuccess(result)
+            })
             .catch(err => onFail(err))
-        dispatch(likeBlogAction(blog.id))
         dispatch(sortBlogs())
     }
 }
@@ -72,6 +74,18 @@ export const deleteBlog = (id, token, onSuccess = () => {}, onFail = () => {}) =
     }
 }
 
-const { addBlogAction, likeBlogAction, deleteBlogAction } = blogSlice.actions
+export const commentBlog = (id, comment, onSuccess = () => {}, onFail = () => {}) => {
+    return dispatch => {
+        blogService
+            .addComment(id, comment)
+            .then(result => {
+                dispatch(updateBlogAction({ id, updated: result }))
+                return onSuccess(result)
+            })
+            .catch(err => onFail(err))
+    }
+}
+
+const { addBlogAction, updateBlogAction, deleteBlogAction } = blogSlice.actions
 export const { setBlogs, sortBlogs } = blogSlice.actions
 export default blogSlice.reducer

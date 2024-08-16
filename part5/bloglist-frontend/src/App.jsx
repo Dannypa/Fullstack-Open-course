@@ -26,9 +26,6 @@ const App = () => {
     const match = useMatch('/blogs/:id')
     const urlBlog = match
         ? blogs.find(b => {
-              console.log(b)
-              console.log(b.id)
-              console.log(match.params)
               return b.id === match.params.id
           })
         : null

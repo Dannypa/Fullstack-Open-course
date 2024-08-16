@@ -1,6 +1,32 @@
 import PropTypes from 'prop-types'
-import { deleteBlog, likeBlog } from '../reducers/blogsReducer.js'
+import { commentBlog, deleteBlog, likeBlog } from '../reducers/blogsReducer.js'
 import { useDispatch, useSelector } from 'react-redux'
+
+const CommentSection = ({ blog }) => {
+    const dispatch = useDispatch()
+    const handleSubmit = event => {
+        event.preventDefault()
+        console.log(event.target.comment.value)
+        dispatch(commentBlog(blog.id, event.target.comment.value))
+        event.target.reset()
+    }
+
+    return (
+        <>
+            <h2>Comments</h2>
+
+            <form onSubmit={handleSubmit}>
+                <input name={'comment'} /> <button type={'submit'}>comment</button>
+            </form>
+
+            <ul>
+                {blog.comments.map(comment => (
+                    <li key={comment.id}>{comment.body}</li> // bad. comments are not at all unique; ill try to store ids in the database
+                ))}
+            </ul>
+        </>
+    )
+}
 
 const BlogDetails = ({ blog }) => {
     // todo: notifications
@@ -20,7 +46,8 @@ const BlogDetails = ({ blog }) => {
 
     const deleteButton = () =>
         user.username === blog.user.username ? <button onClick={() => handleDelete(blog)}>delete blog</button> : null
-
+    console.log(user.username, 'user')
+    console.log(blog.user.username, 'user blog')
     return (
         <div>
             <p>
@@ -31,12 +58,7 @@ const BlogDetails = ({ blog }) => {
                 </button>
             </p>
             <i>added by {blog.user.username} </i> <br /> <br />
-            <h2>Comments</h2>
-            <ul>
-                {blog.comments.map(comment => (
-                    <li key={comment.id}>{comment.body}</li> // bad. comments are not at all unique; ill try to store ids in the database
-                ))}
-            </ul>
+            <CommentSection blog={blog} />
             {deleteButton()}
         </div>
     )
