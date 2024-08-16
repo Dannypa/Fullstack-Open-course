@@ -33,9 +33,25 @@ const App = () => {
           })
         : null
 
+    const paddingStyle = {
+        padding: 5,
+    }
+
+    const backgroundStyle = {
+        backgroundColor: 'rgb(255, 255, 128)',
+    }
+
     return (
         <div>
             <h1>BlogList</h1>
+            <div style={backgroundStyle}>
+                <Link to={'/'} style={paddingStyle}>
+                    home
+                </Link>
+                <Link to={'/users'} style={paddingStyle}>
+                    users
+                </Link>
+            </div>
             <Notification />
 
             <Routes>
