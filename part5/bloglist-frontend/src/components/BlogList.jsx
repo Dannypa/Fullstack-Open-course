@@ -16,16 +16,17 @@ import {
     TableRow,
     Toolbar,
     Typography,
+    Link as MuiLink,
 } from '@mui/material'
 
 const BlogPreview = ({ blog }) => {
     return (
-        <p>
-            <Link to={`/blogs/${blog.id}`}>
+        <Typography>
+            <MuiLink href={`/blogs/${blog.id}`} color={'inherit'}>
                 <b>{blog.title}</b>
-            </Link>{' '}
+            </MuiLink>{' '}
             <br /> <i>by {blog.author + ' '}</i>
-        </p>
+        </Typography>
     )
 }
 
