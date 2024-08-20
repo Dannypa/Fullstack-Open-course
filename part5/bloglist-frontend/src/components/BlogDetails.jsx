@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import { commentBlog, deleteBlog, likeBlog } from '../reducers/blogsReducer.js'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link as Muilink } from '@mui/material'
 
 const CommentSection = ({ blog }) => {
     const dispatch = useDispatch()
@@ -16,7 +17,7 @@ const CommentSection = ({ blog }) => {
             <h2>Comments</h2>
 
             <form onSubmit={handleSubmit}>
-                <input name={'comment'} /> <button type={'submit'}>comment</button>
+                <input name={'comment'} /> <button type={'submit'}>add comment</button>
             </form>
 
             <ul>
@@ -51,7 +52,10 @@ const BlogDetails = ({ blog }) => {
     return (
         <div>
             <p>
-                <a href={blog.url}>{blog.url}</a> <br />
+                <Muilink component={'span'} href={blog.url} color={'inherit'}>
+                    {blog.url}
+                </Muilink>{' '}
+                <br />
                 {blog.likes} likes{' '}
                 <button className={'likeButton'} onClick={() => handleLikeIncrease(blog)}>
                     like

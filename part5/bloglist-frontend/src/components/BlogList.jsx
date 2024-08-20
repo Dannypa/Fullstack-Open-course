@@ -4,7 +4,7 @@ import Togglable from './Togglable.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { notify } from '../reducers/notificationReducer.js'
 import { setUser } from '../reducers/userReducer.js'
-import { Link } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import {
     AppBar,
     Button,
@@ -22,10 +22,10 @@ import {
 const BlogPreview = ({ blog }) => {
     return (
         <Typography>
-            <MuiLink href={`/blogs/${blog.id}`} color={'inherit'}>
+            <MuiLink component={RouterLink} to={`/blogs/${blog.id}`} color={'inherit'}>
                 <b>{blog.title}</b>
-            </MuiLink>{' '}
-            <br /> <i>by {blog.author + ' '}</i>
+            </MuiLink>
+            <br /> <i>by {blog.author}</i>
         </Typography>
     )
 }
@@ -46,30 +46,28 @@ const BlogList = () => {
         <div>
             <AppBar position={'static'}>
                 <Toolbar>
-                    <Button to={'/'} color={'inherit'} component={Link}>
+                    <Button to={'/'} color={'inherit'} component={RouterLink}>
                         home
                     </Button>
-                    <Button to={'/users'} color={'inherit'} component={Link}>
+                    <Button to={'/users'} color={'inherit'} component={RouterLink}>
                         users
                     </Button>
                 </Toolbar>
             </AppBar>
             <p data-testid={'logged-user-name'}>
-                <Typography>
-                    <i>You are logged in as {`${user.name}.`} </i>
+                <Typography component={'span'}>
+                    <i>You are logged in as {`${user.name}.`} </i> <br />
                 </Typography>
                 <Button color={'inherit'} variant={'contained'} onClick={handleLogOut} style={{ marginTop: 10 }}>
                     log out
                 </Button>
-            </p>{' '}
+            </p>
             <br />
             <Togglable label={'create a blog'} ref={addBlogRef}>
                 <AddBlog token={user.token} selfToggleRef={addBlogRef} />
             </Togglable>
             <TableContainer component={Paper} style={{ marginTop: 10 }}>
-                {' '}
                 <Table>
-                    {' '}
                     <TableBody>
                         {blogs.map(blog => (
                             <TableRow key={blog.id}>
